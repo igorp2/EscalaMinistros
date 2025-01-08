@@ -249,9 +249,17 @@ async function gerarPDF() {
             yPos = doc.lastAutoTable.finalY + 10;
         
             // Linha divisória entre domingos
-            doc.line(0, yPos, larguraPagina, yPos);
-            yPos += 10;
-        }        
+            if(domingoIndex < 3) {
+                doc.line(0, yPos, larguraPagina, yPos);
+                yPos += 10;
+            }
+        }    
+        
+        doc.setFontSize(12); // Define o tamanho da fonte
+        const larguraFrase = doc.getTextWidth("“SIRVAMOS SEMPRE A DEUS COM RESPEITO, AMOR E ALEGRIA”"); // Calcula a largura do texto
+        const posX = (doc.internal.pageSize.width - larguraFrase) / 2; // Calcula a posição X para centralizar
+        doc.text("“SIRVAMOS SEMPRE A DEUS COM RESPEITO, AMOR E ALEGRIA”", posX, yPos); // Adiciona o texto centralizado
+
 
         function calcularEscalas(distribuicao) {
             // Criar um objeto para armazenar as contagens de escalas por ministro
