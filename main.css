@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #b7d7fa;
+    width: 30%;
+    margin: 4% auto;
+    border: solid 2px #007bff;
+    border-radius: 5px;
+    padding: 50px;
+    position: relative;
+    align-items: center;
+    text-align: center;
+}
+h2, h3{
+    color: rgb(17, 14, 117);
+}
+form {
+    margin-bottom: 20px;
+}
+.input-group {
+    margin-bottom: 10px;
+}
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo geral para o select */
+select {
+    background-color: #b7d7fa; 
+    border: 2px solid #007bff; 
+    border-radius: 8px; 
+    padding: 10px 15px; 
+    font-size: 14px; 
+    color: #333; 
+    outline: none; 
+    transition: border-color 0.3s ease; 
+    cursor: pointer;
+}
+
+/* Estilo para o hover */
+select:hover {
+    border-color: #0056b3; 
+}
+
+/* Estilo para o focus */
+select:focus {
+    border-color: #007bff; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+}
+
+/* Estilo para as opções dentro do select */
+option {
+    padding: 10px; 
+    background-color: #fff; 
+    color: #333; 
+}
+
+/* Opções no hover */
+option:hover {
+    background-color: #f0f0f0; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #a9cdf4;
+}
+table, th, td {
+    border: 1px solid #0056b3;
+}
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+tr > th{
+    background-color: #0056b3;
+}
+
+ /* Estilo da div oculta inicialmente */
+ #conteudo {
+    display: block;
+    height: 0px; /* Inicialmente oculto */
+    overflow: hidden; /* Impede que o conteúdo ultrapasse a altura da div */
+    padding: 10px;
+    margin-top: 10px;
+    transition: height 0.5s ease, padding 0.5s ease; /* Anima a altura e o padding */
+
+}
+
+/* Botão para expandir/ocultar */
+#botao {
+    margin-top: 0px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#botao:hover {
+    background-color: #0056b3;
+}
+
+button{
+    border-radius: 5px;
+}
