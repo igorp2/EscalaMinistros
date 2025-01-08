@@ -11,6 +11,11 @@ body {
     align-items: center;
     text-align: center;
 }
+@media (max-width: 1200px) {
+    body {
+        width: 65%;
+    }
+}
 h2, h3{
     color: rgb(17, 14, 117);
 }
