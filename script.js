@@ -31,6 +31,18 @@ function getPrimeiroSabado(mes, ano) {
     return sabado;
 }
 
+function getPrimeiraSexta(mes, ano) {
+    const data = new Date(ano, mes, 1);
+    let diaSemana = data.getDay();
+
+    // A sexta-feira é representada pelo valor 5 em getDay()
+    let primeiraSexta = diaSemana === 5 ? 1 : (5 - diaSemana + 7) % 7 + 1;
+
+    let sexta = new Date(ano, mes, primeiraSexta);
+    return sexta;
+}
+
+
 async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -94,6 +106,7 @@ async function gerarPDF() {
         const mes = meses[mesSelecionado];
         const domingos = getDomingos(mes, anoAtual);
         const primeiroSabado = getPrimeiroSabado(mes, anoAtual);
+        const primeiraSexta = getPrimeiraSexta(mes, anoAtual);
         
         let ministrosPorHorario = {
             "7:00": [],
@@ -140,34 +153,37 @@ async function gerarPDF() {
                     "9:00": [],
                     "19:30": []
                 };
-        
+            
                 // Para cada horário, distribuímos os ministros de forma equilibrada
                 Object.keys(ministrosPorHorario).forEach(horario => {
                     let ministros = [...ministrosPorHorario[horario]]; // Copiar a lista de ministros
-                    
+            
                     embaralhar(ministros);
-        
+            
                     // Ordenar ministros por quantidade de escalas (menor número de escalas primeiro)
                     ministros = ministros.sort((a, b) => contadorEscalas[a] - contadorEscalas[b]);
-        
+            
                     // Selecionar até 6 ministros para o horário, garantindo que nenhum repita no mesmo domingo
                     for (let i = 0; i < 6 && ministros.length > 0; i++) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
                         if (!historicoEscalas[domingo]) {
                             historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
                         }
-        
+            
                         // Garantir que o ministro não seja escalado no mesmo domingo
                         while (historicoEscalas[domingo].has(ministroEscolhido)) {
                             ministroEscolhido = ministros.shift(); // Pega outro ministro
                             if (ministros.length === 0) break;
                         }
-        
+            
                         // Verificar se o ministro é parte de um casal
                         if (casaisMap.has(ministroEscolhido)) {
                             let parceiro = casaisMap.get(ministroEscolhido);
-                            if (!historicoEscalas[domingo].has(parceiro)) {
-                                // Se ambos os ministros do casal ainda não foram escalados, escalá-los juntos
+                            if (
+                                !historicoEscalas[domingo].has(parceiro) &&
+                                distribuido[horario].length + 2 <= 6 // Verifica se há espaço suficiente para o casal
+                            ) {
+                                // Se ambos os ministros do casal ainda não foram escalados e há espaço, escalá-los juntos
                                 distribuido[horario].push(ministroEscolhido);
                                 distribuido[horario].push(parceiro);
                                 historicoEscalas[domingo].add(ministroEscolhido);
@@ -176,26 +192,38 @@ async function gerarPDF() {
                                 contadorEscalas[parceiro]++;
                                 ministros = ministros.filter(m => m !== parceiro); // Remove o parceiro da lista de ministros
                             } else {
-                                // Se o parceiro já foi escalado, tenta novamente com outro ministro
-                                ministros.unshift(ministroEscolhido); // Recoloca o ministro na lista de ministros
+                                // Se o casal não pode ser escalado, coloca o ministro de volta na lista
+                                ministros.unshift(ministroEscolhido);
                             }
                         } else {
                             // Caso o ministro não seja parte de um casal, escalar apenas ele
-                            if (ministroEscolhido) {
+                            if (!historicoEscalas[domingo].has(ministroEscolhido)) {
                                 distribuido[horario].push(ministroEscolhido);
                                 historicoEscalas[domingo].add(ministroEscolhido); // Marca como escalado
                                 contadorEscalas[ministroEscolhido]++; // Incrementa a contagem de escalas
                             }
                         }
-        
+            
+                        // Se já temos 6 ministros, sai do loop
                         if (distribuido[horario].length >= 6) {
                             break; // Já temos 6 ministros para esse horário
                         }
                     }
+            
+                    // Se ainda não completamos 6 ministros, tentamos preencher com solteiros
+                    while (distribuido[horario].length < 6 && ministros.length > 0) {
+                        let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
+                        if (!historicoEscalas[domingo].has(ministroEscolhido) && !casaisMap.has(ministroEscolhido)) {
+                            distribuido[horario].push(ministroEscolhido);
+                            historicoEscalas[domingo].add(ministroEscolhido); // Marca como escalado
+                            contadorEscalas[ministroEscolhido]++; // Incrementa a contagem de escalas
+                        }
+                    }
                 });
-        
+            
                 distribuicao.push(distribuido);
             });
+            
         
             return distribuicao;
         }
@@ -216,40 +244,76 @@ async function gerarPDF() {
         // Adiciona o título negrito
         doc.setFont("helvetica", "bold");
 
+        const missaSagradoCoracao = document.getElementById("missaSagradoCoracao").checked;
+
+        // Escala Sagrado Coração de Jesus
+        if(missaSagradoCoracao) {
+            texto = `${primeiraSexta.toLocaleDateString('pt-BR')} - (Sexta-feira) - Missa do Sagrado Coração de Jesus:`; 
+            
+            // Adiciona o texto ao PDF
+            doc.text(texto, 10, yPos);
+            yPos += 10;
+    
+            doc.autoTable({
+                startY: yPos,
+                head: [['Horário', 'Ministros']],
+                body: [['19:30', 'Ministros de costume.']],
+                theme: 'grid', // Estilo da tabela (grid, plain, strip)
+                styles: {
+                    font: 'helvetica',
+                    fontSize: 10,
+                    halign: 'center', // Centraliza o texto na tabela
+                    cellPadding: 2
+                },
+                headStyles: {
+                    fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                    halign: 'center' // Centraliza o texto no cabeçalho
+                },
+            });
+            yPos = doc.lastAutoTable.finalY + 10;
+    
+            doc.line(0, yPos, larguraPagina, yPos);
+            yPos += 10;
+        }
+
+        const missaSantaTerezinha = document.getElementById("missaSantaTerezinha").checked;
+
         // Escala Santa Terezinha
-        texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Comunidade Santa Terezinha:`; 
-        
-        // Adiciona o texto ao PDF
-        doc.text(texto, 10, yPos);
-        yPos += 10;
-
-        doc.autoTable({
-            startY: yPos,
-            head: [['Horário', 'Ministros']],
-            body: [['19:30', 'Ministros de costume.']],
-            theme: 'grid', // Estilo da tabela (grid, plain, strip)
-            styles: {
-                font: 'helvetica',
-                fontSize: 10,
-                halign: 'center', // Centraliza o texto na tabela
-                cellPadding: 2
-            },
-            headStyles: {
-                fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
-                halign: 'center' // Centraliza o texto no cabeçalho
-            },
-        });
-        yPos = doc.lastAutoTable.finalY + 10;
-
-        doc.line(0, yPos, larguraPagina, yPos);
-        yPos += 10;
+        if(missaSantaTerezinha) {
+            texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha:`; 
+            
+            // Adiciona o texto ao PDF
+            doc.text(texto, 10, yPos);
+            yPos += 10;
+    
+            doc.autoTable({
+                startY: yPos,
+                head: [['Horário', 'Ministros']],
+                body: [['19:30', 'Ministros de costume.']],
+                theme: 'grid', // Estilo da tabela (grid, plain, strip)
+                styles: {
+                    font: 'helvetica',
+                    fontSize: 10,
+                    halign: 'center', // Centraliza o texto na tabela
+                    cellPadding: 2
+                },
+                headStyles: {
+                    fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                    halign: 'center' // Centraliza o texto no cabeçalho
+                },
+            });
+            yPos = doc.lastAutoTable.finalY + 10;
+    
+            doc.line(0, yPos, larguraPagina, yPos);
+            yPos += 10;
+        }
 
         // Exibe os dados no PDF
         for (let domingoIndex = 0; domingoIndex < distribuicaoFinal.length; domingoIndex++) {
             const escalaDomingo = distribuicaoFinal[domingoIndex];
         
             // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
-            if (yPos + 10 > maxY) {
+            if (yPos + 30 > maxY) {
                 doc.addPage();
                 yPos = 20;
             }
@@ -296,19 +360,20 @@ async function gerarPDF() {
             yPos = doc.lastAutoTable.finalY + 10;
         
             // Linha divisória entre domingos
-            if(domingoIndex < 2 || distribuicaoFinal.length == 5 && domingoIndex == 3) {
+            if((missaSantaTerezinha || missaSagradoCoracao) && (domingoIndex < 3 || distribuicaoFinal.length == 5 && domingoIndex == 3)) {
                 doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
             }
-            else {
+            else if(domingoIndex < 3){
+                doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
             }
         }    
         
         doc.setFontSize(12); // Define o tamanho da fonte
-        const larguraFrase = doc.getTextWidth("“SIRVAMOS SEMPRE A DEUS COM RESPEITO, AMOR E ALEGRIA”"); // Calcula a largura do texto
+        const larguraFrase = doc.getTextWidth("“Nada é pequeno se feito com amor.” (Santa Teresinha)"); // Calcula a largura do texto
         const posX = (doc.internal.pageSize.width - larguraFrase) / 2; // Calcula a posição X para centralizar
-        doc.text("“SIRVAMOS SEMPRE A DEUS COM RESPEITO, AMOR E ALEGRIA”", posX, yPos); // Adiciona o texto centralizado
+        doc.text("“Nada é pequeno se feito com amor.” (Santa Terezinha)", posX, yPos); // Adiciona o texto centralizado
 
 
         function calcularEscalas(distribuicao) {

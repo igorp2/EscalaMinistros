@@ -18,11 +18,18 @@ body {
     width: 40%;
     margin: 0 auto;
     padding: 20px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 1200px) {
     .content {
-        width: 70%;
+        width: 80%;
+    }
+}
+
+@media (max-width: 400px) {
+    .content {
+        width: 90%;
     }
 }
 h2, h3{
@@ -133,4 +140,10 @@ tr > th{
 
 button{
     border-radius: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 2rem; /* Espaçamento entre os checkboxes */
+    align-items: center; /* Alinha verticalmente os itens */
 }

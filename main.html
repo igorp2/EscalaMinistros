@@ -38,26 +38,39 @@
                 </table>
             </div>
             <form id="escalaForm">
-            <div class="input-group">
-                <label for="meses">Selecione o mês:</label>
-                <select id="meses" required>
-                    <option value="">Selecione</option>
-                    <option value="Janeiro">Janeiro</option>
-                    <option value="Fevereiro">Fevereiro</option>
-                    <option value="Março">Março</option>
-                    <option value="Abril">Abril</option>
-                    <option value="Maio">Maio</option>
-                    <option value="Junho">Junho</option>
-                    <option value="Julho">Julho</option>
-                    <option value="Agosto">Agosto</option>
-                    <option value="Setembro">Setembro</option>
-                    <option value="Outubro">Outubro</option>
-                    <option value="Novembro">Novembro</option>
-                    <option value="Dezembro">Dezembro</option>
-                </select>
-            </div>
-            <button type="submit">Gerar Escala</button>
-        </form>
+                <div class="input-group">
+                    <label for="meses">Selecione o mês:</label>
+                    <select id="meses" required>
+                        <option value="">Selecione</option>
+                        <option value="Janeiro">Janeiro</option>
+                        <option value="Fevereiro">Fevereiro</option>
+                        <option value="Março">Março</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Maio">Maio</option>
+                        <option value="Junho">Junho</option>
+                        <option value="Julho">Julho</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Setembro">Setembro</option>
+                        <option value="Outubro">Outubro</option>
+                        <option value="Novembro">Novembro</option>
+                        <option value="Dezembro">Dezembro</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Deve adicionar na escala?</label>
+                    <div class="checkbox-group" style="display: inline-flex; gap: 1.5rem;">
+                        <div style="display: -webkit-inline-box;">
+                            <input type="checkbox" id="missaSantaTerezinha" name="missa" value="Missa Santa Terezinha" checked>
+                            <label for="missaSantaTerezinha">Missa Santa Terezinha</label>
+                        </div>
+                        <div style="display: -webkit-inline-box;">
+                            <input type="checkbox" id="missaSagradoCoracao" name="missa" value="Missa Sagrado Coração de Jesus" checked>
+                            <label for="missaSagradoCoracao">Missa Sagrado Coração de Jesus</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">Gerar Escala</button>
+            </form>
         </div>
 
         <script>
@@ -80,9 +93,9 @@
                 { nome: "Giselaine", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Giselda", preferencias: ["9:00", "19:30"] },
                 { nome: "Janilda", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Jozeni", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Jozeni", preferencias: [] },
                 { nome: "Juliana Pereira", preferencias: ["7:00"] },
-                { nome: "Juliana Rodriques", preferencias: ["9:00"] },
+                { nome: "Juliana Rodrigues", preferencias: ["9:00"] },
                 { nome: "Lhidê", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Léia", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Luiza", preferencias: ["19:30"] },
