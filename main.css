@@ -121,8 +121,16 @@ tr > th{
     overflow: hidden; /* Impede que o conteúdo ultrapasse a altura da div */
     padding: 10px;
     margin-top: 10px;
-    transition: height 0.5s ease, padding 0.5s ease; /* Anima a altura e o padding */
+    opacity: 0; /* Começa invisível */
+    transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease; /* Adiciona animação para opacidade */
 }
+
+#conteudo.ativo {
+    height: 100px; /* Ajuste para a altura desejada quando visível */
+    opacity: 1; /* Torna visível */
+    transform: scale(1); /* Escala para o tamanho normal */
+}
+
 
 /* Botão para expandir/ocultar */
 #botao {
