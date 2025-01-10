@@ -20,6 +20,17 @@ function getDomingos(mes, ano) {
     return domingos;
 }
 
+function getPrimeiroSabado(mes, ano) {
+    const data = new Date(ano, mes, 1);
+    let diaSemana = data.getDay();
+    
+    // O sábado é representado pelo valor 6 em getDay()
+    let primeiroSabado = diaSemana === 6 ? 1 : 6 - diaSemana + 1;
+    
+    let sabado = new Date(ano, mes, primeiroSabado);
+    return sabado;
+}
+
 async function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -82,6 +93,7 @@ async function gerarPDF() {
         const anoAtual = new Date().getFullYear();
         const mes = meses[mesSelecionado];
         const domingos = getDomingos(mes, anoAtual);
+        const primeiroSabado = getPrimeiroSabado(mes, anoAtual);
         
         let ministrosPorHorario = {
             "7:00": [],
@@ -162,6 +174,10 @@ async function gerarPDF() {
                                 historicoEscalas[domingo].add(parceiro);
                                 contadorEscalas[ministroEscolhido]++;
                                 contadorEscalas[parceiro]++;
+                                ministros = ministros.filter(m => m !== parceiro); // Remove o parceiro da lista de ministros
+                            } else {
+                                // Se o parceiro já foi escalado, tenta novamente com outro ministro
+                                ministros.unshift(ministroEscolhido); // Recoloca o ministro na lista de ministros
                             }
                         } else {
                             // Caso o ministro não seja parte de um casal, escalar apenas ele
@@ -185,14 +201,48 @@ async function gerarPDF() {
         }
         
         let casais = [
-            ["Carlos Magno", "Giselda"], 
-            // ...
+            ["Carlos Magno", "Giselda"],
+            ["França", "Marlúcia"],
+            ["Avelino", "Vânia"],
+            ["Juliana Pereira", "Dione"],
+            ["Sebastião", "Marismeire"]
         ];
         
         let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais);
         
         let yPos = 50; 
         const maxY = 280;
+
+        // Adiciona o título negrito
+        doc.setFont("helvetica", "bold");
+
+        // Escala Santa Terezinha
+        texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Comunidade Santa Terezinha:`; 
+        
+        // Adiciona o texto ao PDF
+        doc.text(texto, 10, yPos);
+        yPos += 10;
+
+        doc.autoTable({
+            startY: yPos,
+            head: [['Horário', 'Ministros']],
+            body: [['19:30', 'Ministros de costume.']],
+            theme: 'grid', // Estilo da tabela (grid, plain, strip)
+            styles: {
+                font: 'helvetica',
+                fontSize: 10,
+                halign: 'center', // Centraliza o texto na tabela
+                cellPadding: 2
+            },
+            headStyles: {
+                fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                halign: 'center' // Centraliza o texto no cabeçalho
+            },
+        });
+        yPos = doc.lastAutoTable.finalY + 10;
+
+        doc.line(0, yPos, larguraPagina, yPos);
+        yPos += 10;
 
         // Exibe os dados no PDF
         for (let domingoIndex = 0; domingoIndex < distribuicaoFinal.length; domingoIndex++) {
@@ -203,9 +253,6 @@ async function gerarPDF() {
                 doc.addPage();
                 yPos = 20;
             }
-        
-            // Adiciona o título do domingo
-            doc.setFont("helvetica", "bold");
         
             // Espera a resposta da API para obter a celebração
             const celebracao = await getCelebracaoLiturgica((domingos[domingoIndex].toLocaleDateString('pt-BR')).replace(/\//g, '-'));
@@ -249,8 +296,11 @@ async function gerarPDF() {
             yPos = doc.lastAutoTable.finalY + 10;
         
             // Linha divisória entre domingos
-            if(domingoIndex < 3) {
+            if(domingoIndex < 2 || distribuicaoFinal.length == 5 && domingoIndex == 3) {
                 doc.line(0, yPos, larguraPagina, yPos);
+                yPos += 10;
+            }
+            else {
                 yPos += 10;
             }
         }    

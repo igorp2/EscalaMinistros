@@ -37,7 +37,6 @@
                     </tbody>
                 </table>
             </div>
-        
             <form id="escalaForm">
             <div class="input-group">
                 <label for="meses">Selecione o mês:</label>
@@ -64,43 +63,61 @@
         <script>
             // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
             const ministros = [
-                { nome: "Ministro 1", preferencias: ["7:00", "9:00"] },
+                { nome: "Avelino", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Antônia", preferencias: ["7:00", "9:00"] },
+                { nome: "Branca", preferencias: ["7:00"] },
                 { nome: "Carlos Magno", preferencias: ["9:00", "19:30"] },
+                { nome: "Carlos Roberto", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Celma", preferencias: ["19:30"] },
+                { nome: "Dione", preferencias: ["7:00"] },
+                { nome: "Djalma", preferencias: ["7:00", "19:30"] },
+                { nome: "Eliane", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Elivander", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Eliene", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Elma", preferencias: ["9:00"] },
+                { nome: "França", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Geralda", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Giselaine", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Giselda", preferencias: ["9:00", "19:30"] },
-                { nome: "Ministro 4", preferencias: ["9:00"] },
-                { nome: "Ministro 5", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 6", preferencias: ["19:30"] },
-                { nome: "Ministro 7", preferencias: ["7:00", "19:30"] },
-                { nome: "Ministro 8", preferencias: ["9:00"] },
-                { nome: "Ministro 9", preferencias: ["7:00"] },
-                { nome: "Ministro 10", preferencias: ["19:30"] },
-                { nome: "Ministro 11", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 12", preferencias: ["9:00", "19:30"] },
-                { nome: "Ministro 13", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 14", preferencias: ["19:30"] },
-                { nome: "Ministro 15", preferencias: ["7:00", "19:30"] },
-                { nome: "Ministro 16", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 17", preferencias: ["9:00", "19:30"] },
-                { nome: "Ministro 18", preferencias: ["7:00", "19:30"] },
-                { nome: "Ministro 19", preferencias: ["9:00"] },
-                { nome: "Ministro 20", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 21", preferencias: ["19:30"] },
-                { nome: "Ministro 22", preferencias: ["7:00", "19:30"] },
-                { nome: "Ministro 23", preferencias: ["9:00"] },
-                { nome: "Ministro 24", preferencias: ["7:00"] },
-                { nome: "Ministro 25", preferencias: ["19:30"] },
-                { nome: "Ministro 26", preferencias: ["7:00", "9:00"] },
-                { nome: "Ministro 27", preferencias: ["9:00", "19:30"] },
-                { nome: "Ministro 28", preferencias: ["7:00", "19:30"] },
-                { nome: "Ministro 29", preferencias: ["9:00"] },
-                { nome: "Ministro 30", preferencias: ["7:00", "9:00"] }
+                { nome: "Janilda", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Jozeni", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Juliana Pereira", preferencias: ["7:00"] },
+                { nome: "Juliana Rodriques", preferencias: ["9:00"] },
+                { nome: "Lhidê", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Léia", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Luiza", preferencias: ["19:30"] },
+                { nome: "Manoel", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Marina", preferencias: ["7:00", "19:30"] },
+                { nome: "Marismeire", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Marlene", preferencias: ["7:00", "9:00"] },
+                { nome: "Marlúcia", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Maria Aparecida", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Maria de Fátima", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Maria Joana", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Mateus", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Márcia", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Marizeth", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Nilton", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Nívea", preferencias: ["7:00"] },
+                { nome: "Roberta", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Robson", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Rosilene", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Sebastião", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Simone", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Tereza", preferencias: ["7:00"] },
+                { nome: "Valéria", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Vânia", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Vilma", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Walquíria", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Wanderlúcia", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Zoraide", preferencias: ["7:00", "9:00", "19:30"] }
             ];
 
             // Função para preencher a tabela com os dados
             function preencherTabela() {
                 const tabelaBody = document.querySelector("#escalaTabela tbody");
 
-                ministros.forEach(ministro => {
+                ministros.forEach((ministro, index) => {
                     const tr = document.createElement("tr");
 
                     // Nome
@@ -108,10 +125,29 @@
                     tdNome.textContent = ministro.nome;
                     tr.appendChild(tdNome);
 
-                    // Preferências de horários (true = "Sim", false = "Não")
+                    // Preferências de horários (checkboxes para alterar)
                     ["7:00", "9:00", "19:30"].forEach(horario => {
                         const tdHorario = document.createElement("td");
-                        tdHorario.textContent = ministro.preferencias.includes(horario) ? "Sim" : "Não";
+
+                        // Criar o checkbox
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.checked = ministro.preferencias.includes(horario);
+
+                        // Quando o checkbox for alterado, atualizar o array de preferências
+                        checkbox.addEventListener("change", () => {
+                            if (checkbox.checked) {
+                                // Adiciona a preferência se o checkbox for marcado
+                                if (!ministro.preferencias.includes(horario)) {
+                                    ministro.preferencias.push(horario);
+                                }
+                            } else {
+                                // Remove a preferência se o checkbox for desmarcado
+                                ministro.preferencias = ministro.preferencias.filter(p => p !== horario);
+                            }
+                        });
+
+                        tdHorario.appendChild(checkbox);
                         tr.appendChild(tdHorario);
                     });
 
