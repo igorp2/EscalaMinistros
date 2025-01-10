@@ -1,149 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escala de Ministros</title>
-  <link rel="stylesheet" href="main.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  <script src="script.js"></script>
-</head>
-<body>
-  <h2>Escala Mensal</h2>
-  <h3>Ministros Extraordinários da Sagrada Comunhão</h3>
-  <h3>Paróquia Santo Antônio de Pádua Ipanema-MG</h3>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Ministros</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="script.js"></script>
+    </head>
+    <body>
+        <div class="content">
+            <h2>Escala Mensal</h2>
+            <h3>Ministros Extraordinários da Sagrada Comunhão</h3>
+            <img src="icone-sem-fundo.png" style="width: 40%; margin-bottom: 20px;">
+        
+            <!-- Botão para controlar a visibilidade -->
+            <div id="div_botao">
+                <button id="botao" onclick="toggleDiv()">Ver Ministros</button>
+            </div>
+        
+            <div id="conteudo" style="overflow-x: auto; max-width: 100%;">
+            <h3>Disponibilidade de Horários</h3>
+                <table id="escalaTabela">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>7:00</th>
+                        <th>9:00</th>
+                        <th>19:30</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <!-- Dados serão inseridos aqui -->
+                    </tbody>
+                </table>
+            </div>
+        
+            <form id="escalaForm">
+            <div class="input-group">
+                <label for="meses">Selecione o mês:</label>
+                <select id="meses" required>
+                    <option value="">Selecione</option>
+                    <option value="Janeiro">Janeiro</option>
+                    <option value="Fevereiro">Fevereiro</option>
+                    <option value="Março">Março</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Maio">Maio</option>
+                    <option value="Junho">Junho</option>
+                    <option value="Julho">Julho</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Setembro">Setembro</option>
+                    <option value="Outubro">Outubro</option>
+                    <option value="Novembro">Novembro</option>
+                    <option value="Dezembro">Dezembro</option>
+                </select>
+            </div>
+            <button type="submit">Gerar Escala</button>
+        </form>
+        </div>
 
-  <!-- Botão para controlar a visibilidade -->
-  <button id="botao" onclick="toggleDiv()">Ver Ministros</button>
+        <script>
+            // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
+            const ministros = [
+                { nome: "Ministro 1", preferencias: ["7:00", "9:00"] },
+                { nome: "Carlos Magno", preferencias: ["9:00", "19:30"] },
+                { nome: "Giselda", preferencias: ["9:00", "19:30"] },
+                { nome: "Ministro 4", preferencias: ["9:00"] },
+                { nome: "Ministro 5", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 6", preferencias: ["19:30"] },
+                { nome: "Ministro 7", preferencias: ["7:00", "19:30"] },
+                { nome: "Ministro 8", preferencias: ["9:00"] },
+                { nome: "Ministro 9", preferencias: ["7:00"] },
+                { nome: "Ministro 10", preferencias: ["19:30"] },
+                { nome: "Ministro 11", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 12", preferencias: ["9:00", "19:30"] },
+                { nome: "Ministro 13", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 14", preferencias: ["19:30"] },
+                { nome: "Ministro 15", preferencias: ["7:00", "19:30"] },
+                { nome: "Ministro 16", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 17", preferencias: ["9:00", "19:30"] },
+                { nome: "Ministro 18", preferencias: ["7:00", "19:30"] },
+                { nome: "Ministro 19", preferencias: ["9:00"] },
+                { nome: "Ministro 20", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 21", preferencias: ["19:30"] },
+                { nome: "Ministro 22", preferencias: ["7:00", "19:30"] },
+                { nome: "Ministro 23", preferencias: ["9:00"] },
+                { nome: "Ministro 24", preferencias: ["7:00"] },
+                { nome: "Ministro 25", preferencias: ["19:30"] },
+                { nome: "Ministro 26", preferencias: ["7:00", "9:00"] },
+                { nome: "Ministro 27", preferencias: ["9:00", "19:30"] },
+                { nome: "Ministro 28", preferencias: ["7:00", "19:30"] },
+                { nome: "Ministro 29", preferencias: ["9:00"] },
+                { nome: "Ministro 30", preferencias: ["7:00", "9:00"] }
+            ];
 
-  <div id="conteudo" style="overflow-x: auto; max-width: 100%;">
-    <h3>Disponibilidade de Horários</h3>
-      <table id="escalaTabela">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>7:00</th>
-                <th>9:00</th>
-                <th>19:30</th>
-            </tr>
-        </thead>
-            <tbody>
-                <!-- Dados serão inseridos aqui -->
-            </tbody>
-      </table>
-  </div>
+            // Função para preencher a tabela com os dados
+            function preencherTabela() {
+                const tabelaBody = document.querySelector("#escalaTabela tbody");
 
-  <form id="escalaForm">
-    <div class="input-group">
-        <label for="meses">Selecione o mês:</label>
-        <select id="meses" required>
-            <option value="">Selecione</option>
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-        </select>
-    </div>
-    <button type="submit">Gerar Escala</button>
-</form>
+                ministros.forEach(ministro => {
+                    const tr = document.createElement("tr");
 
-<script>
-    // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
-    const ministros = [
-        { nome: "Ministro 1", preferencias: ["7:00", "9:00"] },
-        { nome: "Carlos Magno", preferencias: ["9:00", "19:30"] },
-        { nome: "Giselda", preferencias: ["9:00", "19:30"] },
-        { nome: "Ministro 4", preferencias: ["9:00"] },
-        { nome: "Ministro 5", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 6", preferencias: ["19:30"] },
-        { nome: "Ministro 7", preferencias: ["7:00", "19:30"] },
-        { nome: "Ministro 8", preferencias: ["9:00"] },
-        { nome: "Ministro 9", preferencias: ["7:00"] },
-        { nome: "Ministro 10", preferencias: ["19:30"] },
-        { nome: "Ministro 11", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 12", preferencias: ["9:00", "19:30"] },
-        { nome: "Ministro 13", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 14", preferencias: ["19:30"] },
-        { nome: "Ministro 15", preferencias: ["7:00", "19:30"] },
-        { nome: "Ministro 16", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 17", preferencias: ["9:00", "19:30"] },
-        { nome: "Ministro 18", preferencias: ["7:00", "19:30"] },
-        { nome: "Ministro 19", preferencias: ["9:00"] },
-        { nome: "Ministro 20", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 21", preferencias: ["19:30"] },
-        { nome: "Ministro 22", preferencias: ["7:00", "19:30"] },
-        { nome: "Ministro 23", preferencias: ["9:00"] },
-        { nome: "Ministro 24", preferencias: ["7:00"] },
-        { nome: "Ministro 25", preferencias: ["19:30"] },
-        { nome: "Ministro 26", preferencias: ["7:00", "9:00"] },
-        { nome: "Ministro 27", preferencias: ["9:00", "19:30"] },
-        { nome: "Ministro 28", preferencias: ["7:00", "19:30"] },
-        { nome: "Ministro 29", preferencias: ["9:00"] },
-        { nome: "Ministro 30", preferencias: ["7:00", "9:00"] }
-    ];
+                    // Nome
+                    const tdNome = document.createElement("td");
+                    tdNome.textContent = ministro.nome;
+                    tr.appendChild(tdNome);
 
-    // Função para preencher a tabela com os dados
-    function preencherTabela() {
-        const tabelaBody = document.querySelector("#escalaTabela tbody");
+                    // Preferências de horários (true = "Sim", false = "Não")
+                    ["7:00", "9:00", "19:30"].forEach(horario => {
+                        const tdHorario = document.createElement("td");
+                        tdHorario.textContent = ministro.preferencias.includes(horario) ? "Sim" : "Não";
+                        tr.appendChild(tdHorario);
+                    });
 
-        ministros.forEach(ministro => {
-            const tr = document.createElement("tr");
+                    // Adiciona a linha à tabela
+                    tabelaBody.appendChild(tr);
+                });
+            }
 
-            // Nome
-            const tdNome = document.createElement("td");
-            tdNome.textContent = ministro.nome;
-            tr.appendChild(tdNome);
+            // Preencher a tabela quando a página for carregada
+            preencherTabela();
 
-            // Preferências de horários (true = "Sim", false = "Não")
-            ["7:00", "9:00", "19:30"].forEach(horario => {
-                const tdHorario = document.createElement("td");
-                tdHorario.textContent = ministro.preferencias.includes(horario) ? "Sim" : "Não";
-                tr.appendChild(tdHorario);
+            // Adiciona evento para enviar o formulário e chamar funções
+            const form = document.getElementById("escalaForm");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault(); // Impede o envio do formulário
+                gerarPDF(); // Gera o PDF
+                
             });
 
-            // Adiciona a linha à tabela
-            tabelaBody.appendChild(tr);
-        });
-    }
-
-    // Preencher a tabela quando a página for carregada
-    preencherTabela();
-
-    // Adiciona evento para enviar o formulário e chamar funções
-    const form = document.getElementById("escalaForm");
-    form.addEventListener("submit", function(event) {
-        event.preventDefault(); // Impede o envio do formulário
-        gerarPDF(); // Gera o PDF
-        
-    });
-
-    var div = document.getElementById("conteudo");
-    div.style.opacity = 0; // Torna a div invisível
-
-    function toggleDiv() {
-        var div = document.getElementById("conteudo");
-        var botao = document.getElementById("botao");
-        
-        if (div.style.height === "0px" || div.style.height === "") {
-            div.style.height = div.scrollHeight + "px"; // Ajusta a altura para mostrar o conteúdo
-            botao.innerText = "Ocultar"; // Muda o texto do botão
-            div.style.opacity = 1; // Torna a div visível
-        } else {
-            div.style.height = "0px"; // Reduz a altura para ocultar
-            botao.innerText = "Ver Ministros"; // Muda o texto do botão
+            var div = document.getElementById("conteudo");
             div.style.opacity = 0; // Torna a div invisível
-        }
-    }
-</script>
-</body>
+
+            function toggleDiv() {
+                var div = document.getElementById("conteudo");
+                var botao = document.getElementById("botao");
+                
+                if (div.style.height === "0px" || div.style.height === "") {
+                    div.style.height = div.scrollHeight + "px"; // Ajusta a altura para mostrar o conteúdo
+                    botao.innerText = "Ocultar"; // Muda o texto do botão
+                    div.style.opacity = 1; // Torna a div visível
+                } else {
+                    div.style.height = "0px"; // Reduz a altura para ocultar
+                    botao.innerText = "Ver Ministros"; // Muda o texto do botão
+                    div.style.opacity = 0; // Torna a div invisível
+                }
+            }
+        </script>
+    </body>
 </html>
