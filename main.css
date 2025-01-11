@@ -125,13 +125,6 @@ tr > th{
     transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease; /* Adiciona animação para opacidade */
 }
 
-#conteudo.ativo {
-    height: 100px; /* Ajuste para a altura desejada quando visível */
-    opacity: 1; /* Torna visível */
-    transform: scale(1); /* Escala para o tamanho normal */
-}
-
-
 /* Botão para expandir/ocultar */
 #botao {
     margin-top: 0px;
