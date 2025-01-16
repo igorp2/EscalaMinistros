@@ -35,6 +35,9 @@ body {
 h2, h3{
     color: rgb(17, 14, 117);
 }
+h4{
+    color: #269f07;
+}
 form {
     margin-bottom: 20px;
 }
@@ -44,9 +47,27 @@ form {
 .input-group label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
+    color: rgb(17, 14, 117);
 }
+.input-group input {
+    width: 75%;
+    padding: 10px;
+    border: 1px solid #007bff; 
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #cedeee;
+}
+
+.input-group input:focus {
+    border-color: #0056b3; 
+    box-shadow: 0 0 5px #0056b3;
+    outline: none;
+}
+
 button {
-    margin-top: 15px;
+    margin-top: 25px;
     padding: 10px 15px;
     background-color: #007bff;
     color: white;

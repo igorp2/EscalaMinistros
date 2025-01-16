@@ -40,7 +40,7 @@
             <form id="escalaForm">
                 <div class="input-group">
                     <label for="meses">Selecione o mês:</label>
-                    <select id="meses" required>
+                    <select id="meses" required onchange="atualizarEscala()">
                         <option value="">Selecione</option>
                         <option value="Janeiro">Janeiro</option>
                         <option value="Fevereiro">Fevereiro</option>
@@ -56,7 +56,26 @@
                         <option value="Dezembro">Dezembro</option>
                     </select>
                 </div>
-                <div class="input-group" style="margin-top: 20px;">
+                <div id="escalaMesPassado" style="margin-top: 40px; display: none;">
+                    <h3 id="escalaMensagem">Informe a Escala do Último Domingo de [Mês]</h3>
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label for="missa-7">Ministros das 7:00</label>
+                        <input type="text" id="missa-7" required>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label for="missa-9">Ministros das 9:00</label>
+                        <input type="text" id="missa-9" required>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top: 20px;">
+                        <label for="missa-19">Ministros das 19:30</label>
+                        <input type="text" id="missa-19" required>
+                    </div>
+                    <button type="button" onclick="capturarDados()">Confirmar</button>
+                </div>
+                <div id="gerarEscala" class="input-group" style="margin-top: 20px; display: none;">
+                    <h4>Escala do mês anterior enviada com sucesso!</h4>
                     <label>Deve adicionar na escala?</label>
                     <div class="checkbox-group" style="display: inline-flex; gap: 1.5rem; margin-top: 10px;">
                         <div style="display: flex; gap: 5px;">
@@ -68,12 +87,75 @@
                             <label for="missaSagradoCoracao"> Missa Sagrado Coração de Jesus</label>
                         </div>
                     </div>
+                    <button type="submit">Gerar Escala</button>
                 </div>
-                <button type="submit">Gerar Escala</button>
             </form>
         </div>
 
         <script>
+            let ministrosDoMesAnterior = [];
+
+            function atualizarEscala() {
+                const meses = document.getElementById('meses');
+                const escalaMensagem = document.getElementById('escalaMensagem');
+                const escalaMesPassado = document.getElementById('escalaMesPassado');
+                const gerarEscala = document.getElementById('gerarEscala');
+
+                escalaMesPassado.style.display = "block";             
+                gerarEscala.style.display = "none";
+
+                if(meses.value == ""){
+                    escalaMesPassado.style.display = "none";
+                }
+                
+                // Array com os meses em ordem
+                const listaMeses = [
+                    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+                ];
+                
+                // Obtém o índice do mês selecionado
+                const mesAtualIndex = listaMeses.indexOf(meses.value);
+                
+                if (mesAtualIndex > -1) {
+                    // Calcula o índice do mês anterior (volta para Dezembro se for Janeiro)
+                    const mesAnteriorIndex = (mesAtualIndex - 1 + 12) % 12;
+                    const mesAnterior = listaMeses[mesAnteriorIndex];
+                    
+                    // Atualiza a mensagem com o mês anterior
+                    escalaMensagem.textContent = `Informe a Escala do Último Domingo de ${mesAnterior}`;
+                } else {
+                    escalaMensagem.textContent = "Informe a Escala do Último Domingo de [Mês]";
+                }
+            }
+
+            function capturarDados() {
+                // Obter os valores dos inputs
+                const missa7 = document.getElementById('missa-7').value.trim();
+                const missa9 = document.getElementById('missa-9').value.trim();
+                const missa19 = document.getElementById('missa-19').value.trim();
+
+                // Verificar se todos os campos foram preenchidos
+                if (!missa7 || !missa9 || !missa19) {
+                    alert('Por favor, preencha todos os horários.');
+                    return;
+                }
+
+                ministrosDoMesAnterior = [
+                    ...missa7.split(',').map(value => value.trim()),
+                    ...missa9.split(',').map(value => value.trim()),
+                    ...missa19.split(',').map(value => value.trim())
+                ];
+
+                console.log(ministrosDoMesAnterior);
+
+                const escalaMesPassado = document.getElementById('escalaMesPassado');
+                const gerarEscala = document.getElementById('gerarEscala');
+
+                escalaMesPassado.style.display = "none";
+                gerarEscala.style.display = "block";
+            }
+
             // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
             const ministros = [
                 { nome: "Avelino", preferencias: ["7:00", "9:00", "19:30"] },
@@ -106,7 +188,7 @@
                 { nome: "Marlene", preferencias: ["7:00", "9:00"] },
                 { nome: "Marlúcia", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Maria Aparecida", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Maria de Fátima", preferencias: ["7:00", "9:00", "19:30"] },
+                { nome: "Fátima", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Maria Joana", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Mateus", preferencias: ["7:00", "9:00", "19:30"] },
                 { nome: "Márcia", preferencias: ["7:00", "9:00", "19:30"] },

@@ -121,11 +121,11 @@ async function gerarPDF() {
             });
         });
 
-        function distribuirEscalaRotativa(domingos, ministrosPorHorario, casais) {
+        function distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosDoMesAnterior) {
             let distribuicao = [];
             let historicoEscalas = {}; // Para armazenar quais ministros já foram escalados para cada domingo
             let contadorEscalas = {}; // Para contar quantas vezes cada ministro foi escalado
-            
+        
             // Inicializa o contador de escalas para cada ministro
             Object.values(ministrosPorHorario).forEach(horario => {
                 horario.forEach(ministro => {
@@ -156,6 +156,10 @@ async function gerarPDF() {
         
                 // Armazena os ministros escalados no domingo anterior
                 let ministrosEscaladosNoSemanaPassada = index > 0 ? new Set(Object.values(distribuicao[index - 1]).flat()) : new Set();
+                console.log(ministrosDoMesAnterior)
+                // Para a primeira semana do mês, exclui ministros escalados no mês anterior
+                let ministrosExcluidosPrimeiraSemana = index === 0 ? new Set(ministrosDoMesAnterior) : new Set();
+                console.log(ministrosExcluidosPrimeiraSemana)
         
                 // Para cada horário, distribuímos os ministros de forma equilibrada
                 Object.keys(ministrosPorHorario).forEach(horario => {
@@ -173,8 +177,8 @@ async function gerarPDF() {
                             historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
                         }
         
-                        // Garantir que o ministro não seja escalado no mesmo domingo
-                        while (historicoEscalas[domingo].has(ministroEscolhido) || ministrosEscaladosNoSemanaPassada.has(ministroEscolhido)) {
+                        // Garantir que o ministro não seja escalado no mesmo domingo e não seja do mês anterior na primeira semana
+                        while (historicoEscalas[domingo].has(ministroEscolhido) || ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) || ministrosExcluidosPrimeiraSemana.has(ministroEscolhido)) {
                             ministroEscolhido = ministros.shift(); // Pega outro ministro
                             if (ministros.length === 0) break;
                         }
@@ -185,6 +189,7 @@ async function gerarPDF() {
                             if (
                                 !historicoEscalas[domingo].has(parceiro) &&
                                 !ministrosEscaladosNoSemanaPassada.has(parceiro) &&
+                                !ministrosExcluidosPrimeiraSemana.has(parceiro) &&
                                 distribuido[horario].length + 2 <= 6 // Verifica se há espaço suficiente para o casal
                             ) {
                                 // Se ambos os ministros do casal ainda não foram escalados e há espaço, escalá-los juntos
@@ -203,7 +208,7 @@ async function gerarPDF() {
                             }
                         } else {
                             // Caso o ministro não seja parte de um casal, escalar apenas ele
-                            if (!historicoEscalas[domingo].has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido)) {
+                            if (!historicoEscalas[domingo].has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) && !ministrosExcluidosPrimeiraSemana.has(ministroEscolhido)) {
                                 distribuido[horario].push(ministroEscolhido);
                                 historicoEscalas[domingo].add(ministroEscolhido); // Marca como escalado
                                 ministrosEscaladosNoSemanaPassada.add(ministroEscolhido);
@@ -220,7 +225,7 @@ async function gerarPDF() {
                     // Se ainda não completamos 6 ministros, tentamos preencher com solteiros
                     while (distribuido[horario].length < 6 && ministros.length > 0) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
-                        if (!historicoEscalas[domingo].has(ministroEscolhido) && !casaisMap.has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido)) {
+                        if (!historicoEscalas[domingo].has(ministroEscolhido) && !casaisMap.has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) && !ministrosExcluidosPrimeiraSemana.has(ministroEscolhido)) {
                             distribuido[horario].push(ministroEscolhido);
                             historicoEscalas[domingo].add(ministroEscolhido); // Marca como escalado
                             ministrosEscaladosNoSemanaPassada.add(ministroEscolhido); // Marca como escalado no final de semana anterior
@@ -233,8 +238,8 @@ async function gerarPDF() {
             });
         
             return distribuicao;
-        }        
-        
+        }      
+                      
         let casais = [
             ["Carlos Magno", "Giselda"],
             ["França", "Marlúcia"],
@@ -243,7 +248,7 @@ async function gerarPDF() {
             ["Sebastião", "Marismeire"]
         ];
         
-        let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais);
+        let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosDoMesAnterior);
         
         let yPos = 50; 
         const maxY = 280;
