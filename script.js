@@ -5,6 +5,28 @@ async function getCelebracaoLiturgica(data) {
     return dados.liturgia; // Supondo que a resposta contenha a propriedade "celebracao"
 }
 
+function ajustarCelebracao(celebracao) {
+    if (!celebracao) {
+        return null;
+    }
+
+    // Definir as palavras chave que precisam estar no início
+    const palavrasIniciais = ['Solenidade', 'Festa'];
+
+    // Verificar se a celebração contém uma dessas palavras e reorganizar
+    for (let palavra of palavrasIniciais) {
+        if (celebracao.includes(palavra)) {
+            // Reorganiza a string
+            let novaCelebracao = `${palavra} ${celebracao.replace(palavra, '').trim()}`;
+
+            // Remove vírgula no final, se houver
+            return novaCelebracao.endsWith(',') ? novaCelebracao.slice(0, -1) : novaCelebracao;
+        }
+    }
+
+    return celebracao;  // Se não tiver as palavras chave, retorna a mesma string
+}
+
 function getDomingos(mes, ano) {
     const domingos = [];
     const data = new Date(ano, mes, 1);
@@ -156,10 +178,9 @@ async function gerarPDF() {
         
                 // Armazena os ministros escalados no domingo anterior
                 let ministrosEscaladosNoSemanaPassada = index > 0 ? new Set(Object.values(distribuicao[index - 1]).flat()) : new Set();
-                console.log(ministrosDoMesAnterior)
+
                 // Para a primeira semana do mês, exclui ministros escalados no mês anterior
                 let ministrosExcluidosPrimeiraSemana = index === 0 ? new Set(ministrosDoMesAnterior) : new Set();
-                console.log(ministrosExcluidosPrimeiraSemana)
         
                 // Para cada horário, distribuímos os ministros de forma equilibrada
                 Object.keys(ministrosPorHorario).forEach(horario => {
@@ -256,11 +277,11 @@ async function gerarPDF() {
         // Adiciona o título negrito
         doc.setFont("helvetica", "bold");
 
-        const missaSagradoCoracao = document.getElementById("missaSagradoCoracao").checked;
+        var missaSagradoCoracao = document.getElementById("missaSagradoCoracao").checked;
 
         // Escala Sagrado Coração de Jesus
-        if(missaSagradoCoracao) {
-            texto = `${primeiraSexta.toLocaleDateString('pt-BR')} - (Sexta-feira) - Missa do Sagrado Coração de Jesus:`; 
+        if(missaSagradoCoracao && primeiraSexta.getDate() != 6 && primeiraSexta.getDate() != 7) {
+            texto = `${primeiraSexta.toLocaleDateString('pt-BR')} - (Sexta-feira) - Missa do Sagrado Coração de Jesus`; 
             
             // Adiciona o texto ao PDF
             doc.text(texto, 10, yPos);
@@ -269,7 +290,7 @@ async function gerarPDF() {
             doc.autoTable({
                 startY: yPos,
                 head: [['Horário', 'Ministros']],
-                body: [['19:30', 'Ministros de costume.']],
+                body: [['19:30', 'Ministros do Apostolado da Oração.']],
                 theme: 'grid', // Estilo da tabela (grid, plain, strip)
                 styles: {
                     font: 'helvetica',
@@ -288,11 +309,11 @@ async function gerarPDF() {
             yPos += 10;
         }
 
-        const missaSantaTerezinha = document.getElementById("missaSantaTerezinha").checked;
+        var missaSantaTerezinha = document.getElementById("missaSantaTerezinha").checked;
 
         // Escala Santa Terezinha
-        if(missaSantaTerezinha) {
-            texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha:`; 
+        if(missaSantaTerezinha && primeiroSabado.getDate() != 7) {
+            texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha`; 
             
             // Adiciona o texto ao PDF
             doc.text(texto, 10, yPos);
@@ -329,17 +350,75 @@ async function gerarPDF() {
                 doc.addPage();
                 yPos = 20;
             }
+
+            if(missaSagradoCoracao && (primeiraSexta.getDate() == 6 || primeiraSexta.getDate() == 7 ) && domingos[domingoIndex].getDate() > primeiraSexta.getDate()) {
+                let texto = `${primeiraSexta.toLocaleDateString('pt-BR')} - (Sexta-feira) - Missa do Sagrado Coração de Jesus`; 
+                
+                // Adiciona o texto ao PDF
+                doc.text(texto, 10, yPos);
+                yPos += 10;
+        
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Horário', 'Ministros']],
+                    body: [['19:30', 'Ministros do Apostolado da Oração.']],
+                    theme: 'grid', // Estilo da tabela (grid, plain, strip)
+                    styles: {
+                        font: 'helvetica',
+                        fontSize: 10,
+                        halign: 'center', // Centraliza o texto na tabela
+                        cellPadding: 2
+                    },
+                    headStyles: {
+                        fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                        halign: 'center' // Centraliza o texto no cabeçalho
+                    },
+                });
+                yPos = doc.lastAutoTable.finalY + 10;
+        
+                doc.line(0, yPos, larguraPagina, yPos);
+                yPos += 10;
+                missaSagradoCoracao = false;
+            }
+
+            if(missaSantaTerezinha && primeiroSabado.getDate() == 7 && domingos[domingoIndex].getDate() > primeiroSabado.getDate()) {
+                let texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha`; 
+                
+                // Adiciona o texto ao PDF
+                doc.text(texto, 10, yPos);
+                yPos += 10;
+        
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Horário', 'Ministros']],
+                    body: [['19:30', 'Ministros de costume.']],
+                    theme: 'grid', // Estilo da tabela (grid, plain, strip)
+                    styles: {
+                        font: 'helvetica',
+                        fontSize: 10,
+                        halign: 'center', // Centraliza o texto na tabela
+                        cellPadding: 2
+                    },
+                    headStyles: {
+                        fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                        halign: 'center' // Centraliza o texto no cabeçalho
+                    },
+                });
+                yPos = doc.lastAutoTable.finalY + 10;
+        
+                doc.line(0, yPos, larguraPagina, yPos);
+                yPos += 10;
+                missaSantaTerezinha = false;
+            }
         
             // Espera a resposta da API para obter a celebração
             const celebracao = await getCelebracaoLiturgica((domingos[domingoIndex].toLocaleDateString('pt-BR')).replace(/\//g, '-'));
-            let texto = ""
+
+            const celebracaoTexto = ajustarCelebracao(celebracao);
             
-            if(!celebracao) {
-                texto = `${domingos[domingoIndex].toLocaleDateString('pt-BR')}:`;
-            }
-            else {
-                texto = `${domingos[domingoIndex].toLocaleDateString('pt-BR')} - ${celebracao}:`;
-            }
+            let texto = !celebracaoTexto
+                ? `${domingos[domingoIndex].toLocaleDateString('pt-BR')} - (Domingo)`
+                : `${domingos[domingoIndex].toLocaleDateString('pt-BR')} - (Domingo) - ${celebracaoTexto}`;
             
             // Adiciona o texto ao PDF
             doc.text(texto, 10, yPos);
@@ -376,7 +455,7 @@ async function gerarPDF() {
                 doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
             }
-            else if(domingoIndex < 3){
+            else if(domingoIndex < distribuicaoFinal.length){
                 doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
             }
