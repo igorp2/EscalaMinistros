@@ -193,6 +193,8 @@ async function gerarPDF() {
                 // Para a primeira semana do mês, exclui ministros escalados no mês anterior
                 let ministrosExcluidosPrimeiraSemana = index === 0 ? new Set(ministrosDoMesAnterior) : new Set();
         
+                const ministrosTotais = ministros;
+
                 // Para cada horário, distribuímos os ministros de forma equilibrada
                 Object.keys(ministrosPorHorario).forEach(horario => {
                     let ministros = [...ministrosPorHorario[horario]]; // Copiar a lista de ministros
@@ -210,7 +212,7 @@ async function gerarPDF() {
                         }
         
                         // Garantir que o ministro não seja escalado no mesmo domingo e não seja do mês anterior na primeira semana
-                        while (historicoEscalas[domingo].has(ministroEscolhido) || ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) || ministrosExcluidosPrimeiraSemana.has(ministroEscolhido)) {
+                        while (historicoEscalas[domingo].has(ministroEscolhido) || ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) || ministrosExcluidosPrimeiraSemana.has(ministroEscolhido) || ministrosTotais.find(ministro => ministro.nome === ministroEscolhido).indisponivel.includes(domingo.getDate())) {
                             ministroEscolhido = ministros.shift(); // Pega outro ministro
                             if (ministros.length === 0) break;
                         }
@@ -223,6 +225,7 @@ async function gerarPDF() {
                                 !ministrosEscaladosNoSemanaPassada.has(parceiro) &&
                                 !ministrosExcluidosPrimeiraSemana.has(parceiro) &&
                                 distribuido[horario].length + 2 <= 6 // Verifica se há espaço suficiente para o casal
+                                || !ministrosTotais.find(ministro => ministro.nome === parceiro).indisponivel.includes(domingo.getDate()) 
                             ) {
                                 // Se ambos os ministros do casal ainda não foram escalados e há espaço, escalá-los juntos
                                 distribuido[horario].push(ministroEscolhido);
@@ -257,7 +260,7 @@ async function gerarPDF() {
                     // Se ainda não completamos 6 ministros, tentamos preencher com solteiros
                     while (distribuido[horario].length < 6 && ministros.length > 0) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
-                        if (!historicoEscalas[domingo].has(ministroEscolhido) && !casaisMap.has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) && !ministrosExcluidosPrimeiraSemana.has(ministroEscolhido)) {
+                        if (!historicoEscalas[domingo].has(ministroEscolhido) && !casaisMap.has(ministroEscolhido) && !ministrosEscaladosNoSemanaPassada.has(ministroEscolhido) && !ministrosExcluidosPrimeiraSemana.has(ministroEscolhido) && !ministrosTotais.find(ministro => ministro.nome === ministroEscolhido).indisponivel.includes(domingo.getDate())) {
                             distribuido[horario].push(ministroEscolhido);
                             historicoEscalas[domingo].add(ministroEscolhido); // Marca como escalado
                             ministrosEscaladosNoSemanaPassada.add(ministroEscolhido); // Marca como escalado no final de semana anterior
@@ -473,26 +476,24 @@ async function gerarPDF() {
         }    
         
         function calcularEscalas(distribuicao) {
-            // Criar um objeto para armazenar as contagens de escalas por ministro
             let contadorEscalas = {};
+        
+            // Inicializar todos os ministros com 0 escalas
+            ministros.forEach(ministro => {
+                contadorEscalas[ministro.nome] = 0;
+            });
         
             // Percorrer a distribuição e contar as escalas de cada ministro
             distribuicao.forEach(dia => {
                 Object.keys(dia).forEach(horario => {
                     dia[horario].forEach(ministro => {
-                        // Se o ministro já foi escalado, incrementar o contador
-                        if (contadorEscalas[ministro]) {
-                            contadorEscalas[ministro]++;
-                        } else {
-                            // Caso contrário, inicializar o contador para esse ministro
-                            contadorEscalas[ministro] = 1;
-                        }
+                        contadorEscalas[ministro]++;
                     });
                 });
             });
         
             return contadorEscalas;
-        }
+        }       
                
         let resultado = calcularEscalas(distribuicaoFinal);
         console.log(resultado);        

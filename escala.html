@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escala de Ministros</title>
@@ -9,21 +10,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="script.js"></script>
-    </head>
-    <body>
-        <div class="content">
-            <h2>Escala Mensal</h2>
-            <h3>Ministros Extraordinários da Sagrada Comunhão</h3>
-            <img src="icone-sem-fundo.png" style="width: 40%; margin-bottom: 20px;">
-        
-            <!-- Botão para controlar a visibilidade -->
-            <div id="div_botao">
-                <button id="botao" onclick="toggleDiv()">Ver Ministros</button>
-            </div>
-        
-            <div id="conteudo" style="overflow-x: auto; max-width: 100%;">
+</head>
+
+<body>
+    <div class="content">
+        <h2>Escala Mensal</h2>
+        <h3>Ministros Extraordinários da Sagrada Comunhão</h3>
+        <img src="icone-sem-fundo.png" style="width: 40%; margin-bottom: 20px;">
+
+        <!-- Botão para controlar a visibilidade -->
+        <div id="div_botao">
+            <button id="botao" onclick="toggleDiv()">Ver Ministros</button>
+        </div>
+
+        <div id="conteudo" style="overflow-x: auto; max-width: 100%;">
             <h3>Disponibilidade de Horários</h3>
-                <table id="escalaTabela">
+            <table id="escalaTabela">
                 <thead>
                     <tr>
                         <th>Nome</th>
@@ -32,254 +34,392 @@
                         <th>19:30</th>
                     </tr>
                 </thead>
-                    <tbody>
-                        <!-- Dados serão inseridos aqui -->
-                    </tbody>
-                </table>
-            </div>
-            <form id="escalaForm">
-                <div class="input-group">
-                    <label for="meses">Selecione o mês:</label>
-                    <select id="meses" required onchange="atualizarEscala()">
-                        <option value="">Selecione</option>
-                        <option value="Janeiro">Janeiro</option>
-                        <option value="Fevereiro">Fevereiro</option>
-                        <option value="Março">Março</option>
-                        <option value="Abril">Abril</option>
-                        <option value="Maio">Maio</option>
-                        <option value="Junho">Junho</option>
-                        <option value="Julho">Julho</option>
-                        <option value="Agosto">Agosto</option>
-                        <option value="Setembro">Setembro</option>
-                        <option value="Outubro">Outubro</option>
-                        <option value="Novembro">Novembro</option>
-                        <option value="Dezembro">Dezembro</option>
-                    </select>
-                </div>
-                <div id="escalaMesPassado" style="margin-top: 40px; display: none;">
-                    <h3 id="escalaMensagem">Informe a Escala do Último Domingo de [Mês]</h3>
-                    <div class="input-group" style="margin-top: 20px;">
-                        <label for="missa-7">Ministros das 7:00</label>
-                        <input type="text" id="missa-7" required>
-                    </div>
-                    
-                    <div class="input-group" style="margin-top: 20px;">
-                        <label for="missa-9">Ministros das 9:00</label>
-                        <input type="text" id="missa-9" required>
-                    </div>
-                    
-                    <div class="input-group" style="margin-top: 20px;">
-                        <label for="missa-19">Ministros das 19:30</label>
-                        <input type="text" id="missa-19" required>
-                    </div>
-                    <button type="button" onclick="capturarDados()">Confirmar</button>
-                </div>
-                <div id="gerarEscala" class="input-group" style="margin-top: 20px; display: none;">
-                    <h4>Escala do mês anterior enviada com sucesso!</h4>
-                    <label>Deve adicionar na escala?</label>
-                    <div class="checkbox-group" style="display: inline-flex; gap: 1.5rem; margin-top: 10px;">
-                        <div style="display: flex; gap: 5px;">
-                            <input type="checkbox" id="missaSantaTerezinha" name="missa" value="Missa Santa Terezinha" checked>
-                            <label for="missaSantaTerezinha"> Missa Santa Terezinha</label>
-                        </div>
-                        <div style="display: flex; gap: 5px;">
-                            <input type="checkbox" id="missaSagradoCoracao" name="missa" value="Missa Sagrado Coração de Jesus" checked>
-                            <label for="missaSagradoCoracao"> Missa Sagrado Coração de Jesus</label>
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit">Gerar Escala</button>
-                    </div>
-                </div>
-            </form>
+                <tbody>
+                    <!-- Dados serão inseridos aqui -->
+                </tbody>
+            </table>
         </div>
+        <form id="escalaForm">
+            <div class="input-group">
+                <label for="meses">Selecione o mês:</label>
+                <select id="meses" required onchange="atualizarEscala()">
+                    <option value="">Selecione</option>
+                    <option value="Janeiro">Janeiro</option>
+                    <option value="Fevereiro">Fevereiro</option>
+                    <option value="Março">Março</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Maio">Maio</option>
+                    <option value="Junho">Junho</option>
+                    <option value="Julho">Julho</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Setembro">Setembro</option>
+                    <option value="Outubro">Outubro</option>
+                    <option value="Novembro">Novembro</option>
+                    <option value="Dezembro">Dezembro</option>
+                </select>
+            </div>
+            <div id="escalaMesPassado" style="margin-top: 40px; display: none;">
+                <h3 id="escalaMensagem">Informe a Escala do Último Domingo de [Mês]</h3>
+                <div class="input-group" style="margin-top: 20px;">
+                    <label for="missa-7">Ministros das 7:00</label>
+                    <input type="text" id="missa-7" required>
+                </div>
 
-        <script>
-            let ministrosDoMesAnterior = [];
+                <div class="input-group" style="margin-top: 20px;">
+                    <label for="missa-9">Ministros das 9:00</label>
+                    <input type="text" id="missa-9" required>
+                </div>
 
-            function atualizarEscala() {
-                const meses = document.getElementById('meses');
-                const escalaMensagem = document.getElementById('escalaMensagem');
-                const escalaMesPassado = document.getElementById('escalaMesPassado');
-                const gerarEscala = document.getElementById('gerarEscala');
+                <div class="input-group" style="margin-top: 20px;">
+                    <label for="missa-19">Ministros das 19:30</label>
+                    <input type="text" id="missa-19" required>
+                </div>
+                <button type="button" onclick="capturarDados()">Confirmar</button>
+            </div>
+            <div id="gerarEscala" class="input-group" style="margin-top: 20px; display: none;">
+                <h4>Escala do mês anterior enviada com sucesso!</h4>
+                <label>Deve adicionar na escala?</label>
+                <div class="checkbox-group" style="display: inline-flex; gap: 1.5rem; margin-top: 10px;">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" id="missaSantaTerezinha" name="missa" value="Missa Santa Terezinha"
+                            checked>
+                        <label for="missaSantaTerezinha"> Missa Santa Terezinha</label>
+                    </div>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" id="missaSagradoCoracao" name="missa"
+                            value="Missa Sagrado Coração de Jesus" checked>
+                        <label for="missaSagradoCoracao"> Missa Sagrado Coração de Jesus</label>
+                    </div>
+                </div>
+                <div id="conteudoImpedimentos" style="overflow-x: auto; max-width: 100%; margin-top: 20px;">
+                    <h3 style="margin-bottom: 0px;">Indisponibilidade de Ministros em <span id="mesSelecionado"></span>
+                    </h3>
+                    <table id="escalaTabelaImpedimentos"
+                        style="max-height: 500px; display: inline-block; overflow-y: auto; align-items: center; width: fit-content;">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyImpedimentos">
+                            <!-- Dados serão inseridos aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <button type="submit">Gerar Escala</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-                escalaMesPassado.style.display = "block";             
-                gerarEscala.style.display = "none";
+    <script>
+        let ministrosDoMesAnterior = [];
 
-                if(meses.value == ""){
-                    escalaMesPassado.style.display = "none";
-                }
-                
-                // Array com os meses em ordem
-                const listaMeses = [
-                    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-                ];
-                
-                // Obtém o índice do mês selecionado
-                const mesAtualIndex = listaMeses.indexOf(meses.value);
-                
-                if (mesAtualIndex > -1) {
-                    // Calcula o índice do mês anterior (volta para Dezembro se for Janeiro)
-                    const mesAnteriorIndex = (mesAtualIndex - 1 + 12) % 12;
-                    const mesAnterior = listaMeses[mesAnteriorIndex];
-                    
-                    // Atualiza a mensagem com o mês anterior
-                    escalaMensagem.textContent = `Informe a Escala do Último Domingo de ${mesAnterior}`;
-                } else {
-                    escalaMensagem.textContent = "Informe a Escala do Último Domingo de [Mês]";
-                }
-            }
+        function atualizarEscala() {
+            const meses = document.getElementById('meses');
+            const escalaMensagem = document.getElementById('escalaMensagem');
+            const escalaMesPassado = document.getElementById('escalaMesPassado');
+            const gerarEscala = document.getElementById('gerarEscala');
 
-            function capturarDados() {
-                // Obter os valores dos inputs
-                const missa7 = document.getElementById('missa-7').value.trim();
-                const missa9 = document.getElementById('missa-9').value.trim();
-                const missa19 = document.getElementById('missa-19').value.trim();
+            escalaMesPassado.style.display = "block";
+            gerarEscala.style.display = "none";
 
-                // Verificar se todos os campos foram preenchidos
-                if (!missa7 || !missa9 || !missa19) {
-                    alert('Por favor, preencha todos os horários.');
-                    return;
-                }
-
-                ministrosDoMesAnterior = [
-                    ...missa7.split(',').map(value => value.trim()),
-                    ...missa9.split(',').map(value => value.trim()),
-                    ...missa19.split(',').map(value => value.trim())
-                ];
-
-                const escalaMesPassado = document.getElementById('escalaMesPassado');
-                const gerarEscala = document.getElementById('gerarEscala');
-
+            if (meses.value == "") {
                 escalaMesPassado.style.display = "none";
-                gerarEscala.style.display = "block";
             }
 
-            // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
-            const ministros = [
-                { nome: "Avelino", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Antônia", preferencias: ["7:00", "9:00"] },
-                { nome: "Branca", preferencias: ["7:00"] },
-                { nome: "Carlos Magno", preferencias: ["9:00", "19:30"] },
-                { nome: "Carlos Roberto", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Celma", preferencias: ["19:30"] },
-                { nome: "Dione", preferencias: ["7:00"] },
-                { nome: "Djalma", preferencias: ["7:00", "19:30"] },
-                { nome: "Eliane", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Elivander", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Eliene", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Elma", preferencias: ["9:00"] },
-                { nome: "França", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Geralda", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Giselaine", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Giselda", preferencias: ["9:00", "19:30"] },
-                { nome: "Gislene", preferencias: ["9:00", "19:30"] },
-                { nome: "Janilda", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Jozeni", preferencias: [] },
-                { nome: "Juliana Pereira", preferencias: ["7:00"] },
-                { nome: "Juliana Rodrigues", preferencias: ["9:00"] },
-                { nome: "Lhidê", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Léia", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Luiza", preferencias: ["19:30"] },
-                { nome: "Manoel", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Marina", preferencias: ["7:00", "19:30"] },
-                { nome: "Marismeire", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Marlene", preferencias: ["7:00", "9:00"] },
-                { nome: "Marlúcia", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Maria Aparecida", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Fátima", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Maria Joana", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Mateus", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Márcia", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Marizeth", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Nilton", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Nívea", preferencias: ["7:00"] },
-                { nome: "Roberta", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Robson", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Rosilene", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Sebastião", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Simone", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Tereza", preferencias: ["7:00"] },
-                { nome: "Valéria", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Vânia", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Vilma", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Walquíria", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Wanderlúcia", preferencias: ["7:00", "9:00", "19:30"] },
-                { nome: "Zoraide", preferencias: ["7:00", "9:00", "19:30"] }
+            // Array com os meses em ordem
+            const listaMeses = [
+                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
             ];
 
-            // Função para preencher a tabela com os dados
-            function preencherTabela() {
-                const tabelaBody = document.querySelector("#escalaTabela tbody");
+            // Obtém o índice do mês selecionado
+            const mesAtualIndex = listaMeses.indexOf(meses.value);
 
-                ministros.forEach((ministro, index) => {
-                    const tr = document.createElement("tr");
+            if (mesAtualIndex > -1) {
+                // Calcula o índice do mês anterior (volta para Dezembro se for Janeiro)
+                const mesAnteriorIndex = (mesAtualIndex - 1 + 12) % 12;
+                const mesAnterior = listaMeses[mesAnteriorIndex];
 
-                    // Nome
-                    const tdNome = document.createElement("td");
-                    tdNome.textContent = ministro.nome;
-                    tr.appendChild(tdNome);
+                // Atualiza a mensagem com o mês anterior
+                escalaMensagem.textContent = `Informe a Escala do Último Domingo de ${mesAnterior}`;
+            } else {
+                escalaMensagem.textContent = "Informe a Escala do Último Domingo de [Mês]";
+            }
+        }
 
-                    // Preferências de horários (checkboxes para alterar)
-                    ["7:00", "9:00", "19:30"].forEach(horario => {
-                        const tdHorario = document.createElement("td");
+        function capturarDados() {
+            // Obter os valores dos inputs
+            const missa7 = document.getElementById('missa-7').value.trim();
+            const missa9 = document.getElementById('missa-9').value.trim();
+            const missa19 = document.getElementById('missa-19').value.trim();
 
-                        // Criar o checkbox
-                        const checkbox = document.createElement("input");
-                        checkbox.type = "checkbox";
-                        checkbox.checked = ministro.preferencias.includes(horario);
+            // Verificar se todos os campos foram preenchidos
+            if (!missa7 || !missa9 || !missa19) {
+                alert('Por favor, preencha todos os horários.');
+                return;
+            }
 
-                        // Quando o checkbox for alterado, atualizar o array de preferências
-                        checkbox.addEventListener("change", () => {
-                            if (checkbox.checked) {
-                                // Adiciona a preferência se o checkbox for marcado
-                                if (!ministro.preferencias.includes(horario)) {
-                                    ministro.preferencias.push(horario);
-                                }
-                            } else {
-                                // Remove a preferência se o checkbox for desmarcado
-                                ministro.preferencias = ministro.preferencias.filter(p => p !== horario);
+            ministrosDoMesAnterior = [
+                ...missa7.split(',').map(value => value.trim()),
+                ...missa9.split(',').map(value => value.trim()),
+                ...missa19.split(',').map(value => value.trim())
+            ];
+
+            const escalaMesPassado = document.getElementById('escalaMesPassado');
+            const gerarEscala = document.getElementById('gerarEscala');
+
+            escalaMesPassado.style.display = "none";
+            gerarEscala.style.display = "block";
+
+            preencherTabelaImpedimentos();
+        }
+
+        // Vetor com os dados de nomes e preferências (true para preferido, false para não preferido)
+        const ministros = [
+            { nome: "Avelino", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Antônia", preferencias: ["7:00", "9:00"], indisponivel: [] },
+            { nome: "Branca", preferencias: ["7:00"], indisponivel: [] },
+            { nome: "Carlos Magno", preferencias: ["9:00", "19:30"], indisponivel: [] },
+            { nome: "Carlos Roberto", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Celma", preferencias: ["19:30"], indisponivel: [] },
+            { nome: "Dione", preferencias: ["7:00"], indisponivel: [] },
+            { nome: "Djalma", preferencias: ["7:00", "19:30"], indisponivel: [] },
+            { nome: "Eliane", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Elivander", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Eliene", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Elma", preferencias: ["9:00"], indisponivel: [] },
+            { nome: "França", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Geralda", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Giselaine", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Giselda", preferencias: ["9:00", "19:30"], indisponivel: [] },
+            { nome: "Gislene", preferencias: ["9:00", "19:30"], indisponivel: [] },
+            { nome: "Janilda", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Jozeni", preferencias: [], indisponivel: [] },
+            { nome: "Juliana Pereira", preferencias: ["7:00"], indisponivel: [] },
+            { nome: "Juliana Rodrigues", preferencias: ["9:00"], indisponivel: [] },
+            { nome: "Lhidê", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Léia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Luiza", preferencias: ["19:30"], indisponivel: [] },
+            { nome: "Manoel", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Marina", preferencias: ["7:00", "19:30"], indisponivel: [] },
+            { nome: "Marismeire", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Marlene", preferencias: ["7:00", "9:00"], indisponivel: [] },
+            { nome: "Marlúcia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Maria Aparecida", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Fátima", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Maria Joana", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Mateus", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Márcia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Marizeth", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Nilton", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Nívea", preferencias: ["7:00"], indisponivel: [] },
+            { nome: "Roberta", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Robson", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Rosilene", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Sebastião", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Simone", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Tereza", preferencias: ["7:00"], indisponivel: [] },
+            { nome: "Valéria", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Vânia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Vilma", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Walquíria", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Wanderlúcia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Zoraide", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] }
+        ];
+
+
+        // Função para preencher a tabela com os dados
+        function preencherTabela() {
+            const tabelaBody = document.querySelector("#escalaTabela tbody");
+
+            ministros.forEach((ministro, index) => {
+                const tr = document.createElement("tr");
+
+                // Nome
+                const tdNome = document.createElement("td");
+                tdNome.textContent = ministro.nome;
+                tr.appendChild(tdNome);
+
+                // Preferências de horários (checkboxes para alterar)
+                ["7:00", "9:00", "19:30"].forEach(horario => {
+                    const tdHorario = document.createElement("td");
+
+                    // Criar o checkbox
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.checked = ministro.preferencias.includes(horario);
+
+                    // Quando o checkbox for alterado, atualizar o array de preferências
+                    checkbox.addEventListener("change", () => {
+                        if (checkbox.checked) {
+                            // Adiciona a preferência se o checkbox for marcado
+                            if (!ministro.preferencias.includes(horario)) {
+                                ministro.preferencias.push(horario);
                             }
-                        });
-
-                        tdHorario.appendChild(checkbox);
-                        tr.appendChild(tdHorario);
+                        } else {
+                            // Remove a preferência se o checkbox for desmarcado
+                            ministro.preferencias = ministro.preferencias.filter(p => p !== horario);
+                        }
                     });
 
-                    // Adiciona a linha à tabela
-                    tabelaBody.appendChild(tr);
+                    tdHorario.appendChild(checkbox);
+                    tr.appendChild(tdHorario);
                 });
+
+                // Adiciona a linha à tabela
+                tabelaBody.appendChild(tr);
+            });
+        }
+
+        function getDomingos(mes, ano) {
+            const domingos = [];
+            const data = new Date(ano, mes, 1);
+            let diaSemana = data.getDay();
+            let primeiroDomingo = diaSemana === 0 ? 1 : 7 - diaSemana + 1;
+            let domingo = new Date(ano, mes, primeiroDomingo);
+
+            while (domingo.getMonth() === mes) {
+                domingos.push(new Date(domingo));
+                domingo.setDate(domingo.getDate() + 7);
             }
 
-            // Preencher a tabela quando a página for carregada
-            preencherTabela();
+            return domingos;
+        }
 
-            // Adiciona evento para enviar o formulário e chamar funções
-            const form = document.getElementById("escalaForm");
-            form.addEventListener("submit", function(event) {
-                event.preventDefault(); // Impede o envio do formulário
-                gerarPDF(); // Gera o PDF
-                
+        function preencherTabelaImpedimentos() {
+            const tabela = document.querySelector("#escalaTabelaImpedimentos");
+            const tabelaBody = tabela.querySelector("tbody"); // Seleciona apenas o corpo da tabela
+
+            const meses = {
+                Janeiro: 0, Fevereiro: 1, Março: 2, Abril: 3, Maio: 4, Junho: 5,
+                Julho: 6, Agosto: 7, Setembro: 8, Outubro: 9, Novembro: 10, Dezembro: 11
+            };
+
+            const mesSelecionado = document.getElementById("meses").value;
+            document.getElementById("mesSelecionado").innerText = mesSelecionado;
+            const anoAtual = new Date().getFullYear();
+            const mes = meses[mesSelecionado];
+            const domingos = getDomingos(mes, anoAtual); // Certifique-se que esta função retorna os domingos corretamente
+
+            // Limpar tabela antes de preencher
+            tabelaBody.innerHTML = "";
+
+            // Criar cabeçalho dinâmico para os dias do mês
+            const thead = tabela.querySelector("thead");
+            thead.innerHTML = "<tr><th>Nome</th></tr>"; // Reinicia o cabeçalho
+            const thRow = thead.querySelector("tr");
+
+            // Adiciona a coluna 'Marcar Todos' no cabeçalho
+            const thMarcarTodos = document.createElement("th");
+            thMarcarTodos.textContent = "Marcar Todos";
+            thRow.appendChild(thMarcarTodos);
+
+            domingos.forEach((dia) => {
+                const thDia = document.createElement("th");
+                thDia.textContent = dia.getDate();
+                thRow.appendChild(thDia);
             });
 
-            var div = document.getElementById("conteudo");
-            div.style.opacity = 0; // Torna a div invisível
+            // Preencher a tabela com os ministros e checkboxes dos dias
+            ministros.forEach((ministro) => {
+                const tr = document.createElement("tr");
 
-            function toggleDiv() {
-                var div = document.getElementById("conteudo");
-                var botao = document.getElementById("botao");
-                
-                if (div.style.height === "0px" || div.style.height === "") {
-                    div.style.height = div.scrollHeight + "px"; // Ajusta a altura para mostrar o conteúdo
-                    botao.innerText = "Ocultar"; // Muda o texto do botão
-                    div.style.opacity = 1; // Torna a div visível
-                } else {
-                    div.style.height = "0px"; // Reduz a altura para ocultar
-                    botao.innerText = "Ver Ministros"; // Muda o texto do botão
-                    div.style.opacity = 0; // Torna a div invisível
-                }
+                // Nome do ministro
+                const tdNome = document.createElement("td");
+                tdNome.textContent = ministro.nome;
+                tr.appendChild(tdNome);
+
+                // Criar coluna de marcar todos para o ministro
+                const tdMarcarTodos = document.createElement("td");
+                const checkboxMarcarTodos = document.createElement("input");
+                checkboxMarcarTodos.type = "checkbox";
+
+                tdMarcarTodos.appendChild(checkboxMarcarTodos);
+                tr.appendChild(tdMarcarTodos);
+
+                // Criar colunas de dias com checkboxes
+                const checkboxes = [];
+                domingos.forEach((dia) => {
+                    const diaNumero = dia.getDate();
+                    const tdDia = document.createElement("td");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.checked = ministro.indisponivel.includes(diaNumero);
+
+                    checkboxes.push(checkbox);
+
+                    checkbox.addEventListener("change", () => {
+                        if (checkbox.checked) {
+                            if (!ministro.indisponivel.includes(diaNumero)) {
+                                ministro.indisponivel.push(diaNumero);
+                            }
+                        } else {
+                            ministro.indisponivel = ministro.indisponivel.filter(d => d !== diaNumero);
+                        }
+
+                        // Verificar se todos os checkboxes da linha estão marcados
+                        const todosMarcados = checkboxes.every(cb => cb.checked);
+                        checkboxMarcarTodos.checked = todosMarcados;
+                    });
+
+                    tdDia.appendChild(checkbox);
+                    tr.appendChild(tdDia);
+                });
+
+                // Evento para marcar/desmarcar todos os checkboxes da linha
+                checkboxMarcarTodos.addEventListener("change", () => {
+                    checkboxes.forEach(cb => {
+                        cb.checked = checkboxMarcarTodos.checked;
+                        if (checkboxMarcarTodos.checked) {
+                            domingos.forEach((dia) => {
+                                const diaNumero = dia.getDate();
+                                if (!ministro.indisponivel.includes(diaNumero)) {
+                                    ministro.indisponivel.push(diaNumero);
+                                }
+                            });
+                        } else {
+                            ministro.indisponivel = [];
+                        }
+                    });
+                });
+
+                tabelaBody.appendChild(tr);
+            });
+        }
+
+
+        // Preencher a tabela quando a página for carregada
+        preencherTabela();
+
+        // Adiciona evento para enviar o formulário e chamar funções
+        const form = document.getElementById("escalaForm");
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Impede o envio do formulário
+            gerarPDF(); // Gera o PDF
+
+        });
+
+        var div = document.getElementById("conteudo");
+        div.style.opacity = 0; // Torna a div invisível
+
+        function toggleDiv() {
+            var div = document.getElementById("conteudo");
+            var botao = document.getElementById("botao");
+
+            if (div.style.height === "0px" || div.style.height === "") {
+                div.style.height = div.scrollHeight + "px"; // Ajusta a altura para mostrar o conteúdo
+                botao.innerText = "Ocultar"; // Muda o texto do botão
+                div.style.opacity = 1; // Torna a div visível
+            } else {
+                div.style.height = "0px"; // Reduz a altura para ocultar
+                botao.innerText = "Ver Ministros"; // Muda o texto do botão
+                div.style.opacity = 0; // Torna a div invisível
             }
-        </script>
-    </body>
+        }
+    </script>
+</body>
+
 </html>

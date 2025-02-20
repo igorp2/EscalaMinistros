@@ -224,3 +224,14 @@ input[type="checkbox"]:checked::before {
         align-items: center; /* Alinha os itens à esquerda */
     }
 }
+
+*{
+    scrollbar-width: thin;          
+    scrollbar-color: #0056b3 #b7d7fa;   
+}
+
+#escalaTabelaImpedimentos thead {
+    position: sticky;
+    top: -1px;
+    z-index: 2; /* Maior que o tbody */
+}
