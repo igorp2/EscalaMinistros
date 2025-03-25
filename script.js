@@ -154,7 +154,7 @@ async function gerarPDF() {
             });
         });
 
-        function distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosDoMesAnterior) {
+        function distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosNovos, ministrosDoMesAnterior) {
             let distribuicao = [];
             let historicoEscalas = {}; // Para armazenar quais ministros já foram escalados para cada domingo
             let contadorEscalas = {}; // Para contar quantas vezes cada ministro foi escalado
@@ -234,6 +234,14 @@ async function gerarPDF() {
                             if (ministros.length === 0) break;
                         }
 
+                        // Verificar se no horário já preencheu no máximo 3 ministros novos...
+                        if (ministrosNovos.includes(ministroEscolhido)) {
+                            let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
+                            if (ministrosNovosCount >= 3) {
+                                continue; // Pula para o próximo ministro se já houver 3 ministros novos
+                            }
+                        }                        
+
                         // Verificar se o ministro é parte de um casal
                         if (casaisMap.has(ministroEscolhido)) {
                             let parceiro = casaisMap.get(ministroEscolhido);
@@ -243,7 +251,15 @@ async function gerarPDF() {
                             // Verifica se há espaço para escalar os dois juntos
                             let hasEspacoParaCasal = distribuido[horario].length + 2 <= 6;
 
-                            if (ministroDisponivel && parceiroDisponivel && hasEspacoParaCasal) {
+                            if (ministroDisponivel && parceiroDisponivel && hasEspacoParaCasal) {                            
+                                // Verificar se no horário já preencheu no máximo 3 ministros novos...
+                                if (ministrosNovos.includes(ministroEscolhido)) {
+                                    let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
+                                    if (ministrosNovosCount >= 3) {
+                                        continue; // Pula para o próximo ministro se já houver 3 ministros novos
+                                    }
+                                } 
+
                                 // Ambos estão disponíveis e há espaço suficiente para escalar juntos
                                 if (
                                     !historicoEscalas[domingo].has(parceiro) &&
@@ -286,6 +302,15 @@ async function gerarPDF() {
                     // Se ainda não completamos 6 ministros, tentamos preencher com solteiros
                     while (distribuido[horario].length < 6 && ministros.length > 0) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
+
+                        // Verificar se no horário já preencheu no máximo 3 ministros novos...
+                        if (ministrosNovos.includes(ministroEscolhido)) {
+                            let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
+                            if (ministrosNovosCount >= 3) {
+                                continue; // Pula para o próximo ministro se já houver 3 ministros novos
+                            }
+                        }     
+
                         if (
                             !historicoEscalas[domingo].has(ministroEscolhido) &&
                             !casaisMap.has(ministroEscolhido) &&
@@ -315,7 +340,31 @@ async function gerarPDF() {
             ["Sebastião", "Marismeire"]
         ];
 
-        let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosDoMesAnterior);
+        const ministrosNovos = [
+            "Maria Aparecida",
+            "Juliana Rodrigues",
+            "Juliana Pereira",
+            "Dione",
+            "França",
+            "Tereza",
+            "Marlene",
+            "Marizeth",
+            "Avelino",
+            "Vânia",
+            "Marina",
+            "Robson",
+            "Marismeire",
+            "Luiza",
+            "Claudiana",
+            "Manoel",
+            "Carlos Roberto",
+            "Elivander",
+            "Vilma",
+            "Maria Joana",
+            "Márcia"
+          ];
+
+        let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosNovos, ministrosDoMesAnterior);
 
         let yPos = 52;
         const maxY = 280;
@@ -466,9 +515,17 @@ async function gerarPDF() {
                 ? `${domingos[domingoIndex].toLocaleDateString('pt-BR')} - (Domingo)`
                 : `${domingos[domingoIndex].toLocaleDateString('pt-BR')} - (Domingo) - ${celebracaoTexto}`;
 
-            // Adiciona o texto ao PDF
-            doc.text(texto, 14, yPos);
-            yPos += 10;
+            // Define a largura máxima antes de quebrar o texto
+            let larguraMaxima = 180;
+
+            // Divide o texto automaticamente para caber na largura
+            let linhas = doc.splitTextToSize(texto, larguraMaxima);
+
+            // Adiciona cada linha ao PDF, ajustando a posição vertical (yPos)
+            linhas.forEach(linha => {
+                doc.text(linha, 14, yPos);
+                yPos += 10; // Ajuste o espaçamento entre as linhas conforme necessário
+            });
 
             // Prepara os dados para a tabela
             const tabelaDados = Object.keys(escalaDomingo).map(horario => {
