@@ -255,7 +255,7 @@ async function gerarPDF() {
                                 // Verificar se no horário já preencheu no máximo 3 ministros novos...
                                 if (ministrosNovos.includes(ministroEscolhido)) {
                                     let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
-                                    if (ministrosNovosCount >= 3) {
+                                    if (ministrosNovosCount + 1 >= 3) {
                                         continue; // Pula para o próximo ministro se já houver 3 ministros novos
                                     }
                                 } 
