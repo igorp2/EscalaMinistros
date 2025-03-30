@@ -363,6 +363,10 @@ async function gerarPDF() {
             "Maria Joana",
             "Márcia"
           ];
+        
+        if(mesSelecionado == "Abril"){
+            domingos.splice(1, 1);
+        }
 
         let distribuicaoFinal = distribuirEscalaRotativa(domingos, ministrosPorHorario, casais, ministrosNovos, ministrosDoMesAnterior);
 
@@ -439,9 +443,13 @@ async function gerarPDF() {
         // Exibe os dados no PDF
         for (let domingoIndex = 0; domingoIndex < distribuicaoFinal.length; domingoIndex++) {
             const escalaDomingo = distribuicaoFinal[domingoIndex];
+            if (domingoIndex == 1) {
+                distribuicaoFinal[domingoIndex]["18:00"] = distribuicaoFinal[domingoIndex]["19:30"]
+                delete distribuicaoFinal[domingoIndex]["19:30"];
+            }
 
             // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
-            if (yPos + 30 > maxY) {
+            if (yPos + 20 > maxY) {
                 doc.addPage();
                 yPos = 20;
             }
@@ -506,6 +514,34 @@ async function gerarPDF() {
                 missaSantaTerezinha = false;
             }
 
+            if(domingoIndex == 1 && mesSelecionado == "Abril"){
+                const celebracao = await getCelebracaoLiturgica("13-04-2025");
+
+                const celebracaoTexto = ajustarCelebracao(celebracao);
+
+                let texto = !celebracaoTexto
+                    ? "13/04/2025 - (Domingo)"
+                    : `13/04/2025 - (Domingo) - ${celebracaoTexto}`;
+
+                // Define a largura máxima antes de quebrar o texto
+                let larguraMaxima = 180;
+
+                // Divide o texto automaticamente para caber na largura
+                let linhas = doc.splitTextToSize(texto, larguraMaxima);
+
+                // Adiciona cada linha ao PDF, ajustando a posição vertical (yPos)
+                linhas.forEach(linha => {
+                    doc.text(linha, 14, yPos);
+                    yPos += 10; // Ajuste o espaçamento entre as linhas conforme necessário
+                });
+                
+                doc.text("SEMANA SANTA", 14, yPos);
+                yPos += 5;
+
+                doc.line(0, yPos, larguraPagina, yPos);
+                yPos += 10;
+            }
+
             // Espera a resposta da API para obter a celebração
             const celebracao = await getCelebracaoLiturgica((domingos[domingoIndex].toLocaleDateString('pt-BR')).replace(/\//g, '-'));
 
@@ -524,7 +560,7 @@ async function gerarPDF() {
             // Adiciona cada linha ao PDF, ajustando a posição vertical (yPos)
             linhas.forEach(linha => {
                 doc.text(linha, 14, yPos);
-                yPos += 10; // Ajuste o espaçamento entre as linhas conforme necessário
+                yPos += 8; // Ajuste o espaçamento entre as linhas conforme necessário
             });
 
             // Prepara os dados para a tabela
