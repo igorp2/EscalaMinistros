@@ -138,6 +138,10 @@ async function gerarPDF() {
 
         const mes = meses[mesSelecionado];
         const domingos = getDomingos(mes, anoAtual);
+        if(mes == 4){
+            primeiroMaio = new Date(anoAtual, mes, 1);
+            domingos.unshift(new Date(primeiroMaio));
+        }
         const primeiroSabado = getPrimeiroSabado(mes, anoAtual);
         const primeiraSexta = getPrimeiraSexta(mes, anoAtual);
 
@@ -198,31 +202,43 @@ async function gerarPDF() {
                     "9:00": [],
                     "19:30": []
                 };
-
+            
+                // Verifique se é o primeiro de maio (maio é mês 4 em JavaScript, pois começa de 0)
+                if (domingo.getDate() === 1 && domingo.getMonth() === 4) {
+                    // Remova os horários "7:00" e "9:00" para o primeiro de maio
+                    delete distribuido["7:00"];
+                    delete distribuido["9:00"];
+                }
+            
                 // Armazena os ministros escalados no domingo anterior
                 let ministrosEscaladosNoSemanaPassada = index > 0 ? new Set(Object.values(distribuicao[index - 1]).flat()) : new Set();
-
+            
                 // Para a primeira semana do mês, exclui ministros escalados no mês anterior
                 let ministrosExcluidosPrimeiraSemana = index === 0 ? new Set(ministrosDoMesAnterior) : new Set();
-
+            
                 const ministrosTotais = ministros;
-
+            
                 // Para cada horário, distribuímos os ministros de forma equilibrada
                 Object.keys(ministrosPorHorario).forEach(horario => {
+                    // Se o horário não existir (no caso de ser o primeiro de maio), ignore o loop
+                    if (!distribuido[horario]) {
+                        return; // Ignora o horário se não existir (no caso de "7:00" e "9:00" para o 1º de maio)
+                    }
+            
                     let ministros = [...ministrosPorHorario[horario]]; // Copiar a lista de ministros
-
+            
                     embaralhar(ministros);
-
+            
                     // Ordenar ministros por quantidade de escalas (menor número de escalas primeiro)
                     ministros = ministros.sort((a, b) => contadorEscalas[a] - contadorEscalas[b]);
-
+            
                     // Selecionar até 6 ministros para o horário, garantindo que nenhum repita no mesmo domingo
                     for (let i = 0; i < 6 && ministros.length > 0; i++) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
                         if (!historicoEscalas[domingo]) {
                             historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
                         }
-
+            
                         // Garantir que o ministro não seja escalado no mesmo domingo e não seja do mês anterior na primeira semana
                         while (
                             historicoEscalas[domingo].has(ministroEscolhido) ||
@@ -233,7 +249,7 @@ async function gerarPDF() {
                             ministroEscolhido = ministros.shift(); // Pega outro ministro
                             if (ministros.length === 0) break;
                         }
-
+            
                         // Verificar se no horário já preencheu no máximo 3 ministros novos...
                         if (ministrosNovos.includes(ministroEscolhido)) {
                             let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
@@ -241,16 +257,16 @@ async function gerarPDF() {
                                 continue; // Pula para o próximo ministro se já houver 3 ministros novos
                             }
                         }                        
-
+            
                         // Verificar se o ministro é parte de um casal
                         if (casaisMap.has(ministroEscolhido)) {
                             let parceiro = casaisMap.get(ministroEscolhido);
                             let ministroDisponivel = !ministrosTotais.find(min => min.nome === ministroEscolhido).indisponivel.includes(domingo.getDate());
                             let parceiroDisponivel = !ministrosTotais.find(min => min.nome === parceiro).indisponivel.includes(domingo.getDate());
-
+            
                             // Verifica se há espaço para escalar os dois juntos
                             let hasEspacoParaCasal = distribuido[horario].length + 2 <= 6;
-
+            
                             if (ministroDisponivel && parceiroDisponivel && hasEspacoParaCasal) {                            
                                 // Verificar se no horário já preencheu no máximo 3 ministros novos...
                                 if (ministrosNovos.includes(ministroEscolhido)) {
@@ -259,7 +275,7 @@ async function gerarPDF() {
                                         continue; // Pula para o próximo ministro se já houver 3 ministros novos
                                     }
                                 } 
-
+            
                                 // Ambos estão disponíveis e há espaço suficiente para escalar juntos
                                 if (
                                     !historicoEscalas[domingo].has(parceiro) &&
@@ -280,7 +296,7 @@ async function gerarPDF() {
                                 continue;
                             }
                         }
-
+            
                         // Caso o ministro não seja parte de um casal, escalar apenas ele
                         if (
                             !historicoEscalas[domingo].has(ministroEscolhido) &&
@@ -292,17 +308,17 @@ async function gerarPDF() {
                             ministrosEscaladosNoSemanaPassada.add(ministroEscolhido);
                             contadorEscalas[ministroEscolhido]++; // Incrementa a contagem de escalas
                         }
-
+            
                         // Se já temos 6 ministros, sai do loop
                         if (distribuido[horario].length == 6) {
                             break;
                         }
                     }
-
+            
                     // Se ainda não completamos 6 ministros, tentamos preencher com solteiros
                     while (distribuido[horario].length < 6 && ministros.length > 0) {
                         let ministroEscolhido = ministros.shift(); // Pega o ministro com menos escalas
-
+            
                         // Verificar se no horário já preencheu no máximo 3 ministros novos...
                         if (ministrosNovos.includes(ministroEscolhido)) {
                             let ministrosNovosCount = distribuido[horario].filter(m => ministrosNovos.includes(m)).length;
@@ -310,7 +326,7 @@ async function gerarPDF() {
                                 continue; // Pula para o próximo ministro se já houver 3 ministros novos
                             }
                         }     
-
+            
                         if (
                             !historicoEscalas[domingo].has(ministroEscolhido) &&
                             !casaisMap.has(ministroEscolhido) &&
@@ -325,9 +341,10 @@ async function gerarPDF() {
                         }
                     }
                 });
-
+            
                 distribuicao.push(distribuido);
             });
+            
 
             return distribuicao;
         }
@@ -371,6 +388,48 @@ async function gerarPDF() {
 
         // Adiciona o título negrito
         doc.setFont("helvetica", "bold");
+
+        if(domingos[0].getDate() == 1 && mes == 4){
+             // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
+             if (yPos + 30 > maxY) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            let texto = `${domingos[0].toLocaleDateString('pt-BR')} - (Quinta-feira) - Abertura do Mês de Maria`;
+
+            // Adiciona o texto ao PDF
+            doc.text(texto, 14, yPos);
+            yPos += 10;
+
+            const escalaDomingo = distribuicaoFinal[0];
+
+            // Prepara os dados para a tabela
+            const tabelaDados = Object.keys(escalaDomingo).map(horario => {
+                return [horario, escalaDomingo[horario].join(', ')];
+            });
+
+            doc.autoTable({
+                startY: yPos,
+                head: [['Horário', 'Ministros']],
+                body: tabelaDados,
+                theme: 'grid', // Estilo da tabela (grid, plain, strip)
+                styles: {
+                    font: 'helvetica',
+                    fontSize: 10,
+                    halign: 'center', // Centraliza o texto na tabela
+                    cellPadding: 2
+                },
+                headStyles: {
+                    fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+                    halign: 'center' // Centraliza o texto no cabeçalho
+                },
+            });
+            yPos = doc.lastAutoTable.finalY + 10;
+
+            doc.line(0, yPos, larguraPagina, yPos);
+            yPos += 10;
+        }
 
         var missaSagradoCoracao = document.getElementById("missaSagradoCoracao").checked;
 
@@ -436,8 +495,9 @@ async function gerarPDF() {
             yPos += 10;
         }
 
+        let domingoIndexAux = domingos[0].getDate() === 1 && domingos[0].getMonth() === 4 ? 1 : 0;
         // Exibe os dados no PDF
-        for (let domingoIndex = 0; domingoIndex < distribuicaoFinal.length; domingoIndex++) {
+        for (let domingoIndex = domingoIndexAux; domingoIndex < distribuicaoFinal.length; domingoIndex++) {
             const escalaDomingo = distribuicaoFinal[domingoIndex];
 
             // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
