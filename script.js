@@ -809,12 +809,13 @@ async function gerarPDF() {
         doc.save(`Escala_Ministros_${mesSelecionado}/${anoAtual}.pdf`);
     }
 
-    let botaoNoveaEspiritoSanto = document.getElementById("botaoEspiritoSanto");
-    botaoNoveaEspiritoSanto.style.display = "inline";
+    if(mesSelecionado == "Junho"){
+        let botaoNovenaEspiritoSanto = document.getElementById("botaoEspiritoSanto");
+        botaoNovenaEspiritoSanto.style.display = "inline";
+    }
 }
 
 function gerarNovenaEspiritoSanto(){
-    console.log(distribuicaoFinal)
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     var img = new Image()
@@ -953,5 +954,8 @@ function gerarNovenaEspiritoSanto(){
 
         // Baixar o PDF
         doc.save(`Escala_Ministros_Novena_Espirito_Santo/${anoAtual}.pdf`);
+
+        let botaoNovenaEspiritoSanto = document.getElementById("botaoEspiritoSanto");
+        botaoNovenaEspiritoSanto.style.display = "block";
     }
 }
