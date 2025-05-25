@@ -20,7 +20,7 @@
 
         <!-- Botão para controlar a visibilidade -->
         <div id="div_botao">
-            <button id="botao" onclick="toggleDiv()">Ver Ministros</button>
+            <button id="botao" onclick="toggleDiv()">Ver Ministros</button>            
         </div>
 
         <div id="conteudo" style="overflow-x: auto; max-width: 100%;">
@@ -108,6 +108,7 @@
                 </div>
                 <div>
                     <button type="submit">Gerar Escala</button>
+                    <button id="botaoEspiritoSanto" onclick="gerarNovenaEspiritoSanto()" style="display: none;">Gerar Novena do Espírito Santo</button>
                 </div>
             </div>
         </form>
@@ -198,7 +199,7 @@
             { nome: "Giselda", preferencias: ["9:00", "19:30"], indisponivel: [] },
             { nome: "Gislene", preferencias: ["9:00", "19:30"], indisponivel: [] },
             { nome: "Janilda", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
-            { nome: "Jozeni", preferencias: [], indisponivel: [] },
+            { nome: "Jozeni", preferencias: ["9:00", "19:30"], indisponivel: [] },
             { nome: "Juliana Pereira", preferencias: ["7:00"], indisponivel: [] },
             { nome: "Juliana Rodrigues", preferencias: ["9:00"], indisponivel: [] },
             { nome: "Lhidê", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
