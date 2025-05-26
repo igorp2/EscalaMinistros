@@ -253,6 +253,11 @@ async function gerarPDF() {
                     distribuido["17:00"] = [];
                 }
 
+                if (domingo.getMonth() === 5 && domingo.getDate() == 1 || domingo.getDate() == 8) {
+                    delete distribuido["19:30"];
+                    distribuido["19:00"] = [];
+                }
+
                 // Armazena os ministros escalados no domingo anterior
                 let ministrosEscaladosNoSemanaPassada = index > 0 ? new Set(Object.values(distribuicao[index - 1]).flat()) : new Set();
             
@@ -270,7 +275,7 @@ async function gerarPDF() {
                     
                     let ministros = [...ministrosPorHorario[horario]]; // Copiar a lista de ministros
 
-                    if ((domingo.getDate() >= 2 && domingo.getDate() <= 7) || (domingo.getDate() >= 9 && domingo.getDate() <= 10) && domingo.getMonth() === 5) {
+                    if (((domingo.getDate() >= 2 && domingo.getDate() <= 7) || (domingo.getDate() >= 9 && domingo.getDate() <= 10)) && domingo.getMonth() == 5) {
                         var indices = [2, 3, 4, 5, 6, 7, 9, 10]
                         var comunidades = [
                             "5 Ministros da Comunidade Nossa Senhora das Graças",
@@ -280,11 +285,29 @@ async function gerarPDF() {
                             "5 Ministros da Comunidade São Sebastião",
                             "5 Ministros da Matriz",
                             "5 Ministros da Comunidade São José",
-                            "5 Ministros da Comunidade São Francisco de Assis"
+                            "5 Ministros da Comunidade Santa Luzia"
                         ]
 
                         distribuido[horario].push(comunidades[indices.indexOf(domingo.getDate())]);
                         return;  
+                    }
+                    
+                    if (domingo.getDate() === 1 && domingo.getMonth() === 5 && horario == "19:00") {
+                        const nomesEscala = ["Janilda", "França", "Dione", "Marlúcia", "Juliana Pereira"];                
+                    
+                        const escalaDia1 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
+
+                        if (!historicoEscalas[domingo]) {
+                            historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
+                        }
+
+                        for (let ministro of escalaDia1) {
+                            distribuido[horario].push(ministro);
+                            historicoEscalas[domingo].add(ministro); 
+                            contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
+                        }                                       
+                        
+                        return;                    
                     }
 
                     if (domingo.getDate() === 11 && domingo.getMonth() === 5) {
@@ -304,6 +327,7 @@ async function gerarPDF() {
                         
                         return;                    
                     }
+
                     if (domingo.getDate() === 12 && domingo.getMonth() === 5) {
                         const nomesEscala = ["Valéria", "Elivander", "Juliana Pereira", "Lhidê", "Fátima"];                
                     
@@ -536,7 +560,7 @@ async function gerarPDF() {
                 theme: 'grid', // Estilo da tabela (grid, plain, strip)
                 styles: {
                     font: 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     halign: 'center', // Centraliza o texto na tabela
                     cellPadding: 2
                 },
@@ -568,7 +592,7 @@ async function gerarPDF() {
                 theme: 'grid', // Estilo da tabela (grid, plain, strip)
                 styles: {
                     font: 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     halign: 'center', // Centraliza o texto na tabela
                     cellPadding: 2
                 },
@@ -600,7 +624,7 @@ async function gerarPDF() {
                 theme: 'grid', // Estilo da tabela (grid, plain, strip)
                 styles: {
                     font: 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     halign: 'center', // Centraliza o texto na tabela
                     cellPadding: 2
                 },
@@ -640,7 +664,7 @@ async function gerarPDF() {
                     theme: 'grid', // Estilo da tabela (grid, plain, strip)
                     styles: {
                         font: 'helvetica',
-                        fontSize: 10,
+                        fontSize: 11,
                         halign: 'center', // Centraliza o texto na tabela
                         cellPadding: 2
                     },
@@ -670,7 +694,7 @@ async function gerarPDF() {
                     theme: 'grid', // Estilo da tabela (grid, plain, strip)
                     styles: {
                         font: 'helvetica',
-                        fontSize: 10,
+                        fontSize: 11,
                         halign: 'center', // Centraliza o texto na tabela
                         cellPadding: 2
                     },
@@ -705,7 +729,7 @@ async function gerarPDF() {
                 celebracaoTexto = "Solenidade Ascensão do Senhor e Abertura da Trezena de Santo Antônio"
             }
 
-            if((data.getDate() > 1 && data.getDate() <= 7) || (data.getDate() > 8 && data.getDate() <= 12) && mes == 5){
+            if(((data.getDate() > 1 && data.getDate() <= 7) || (data.getDate() > 8 && data.getDate() <= 12)) && mes == 5){
                 celebracaoTexto = `${data.getDate()}º Dia da Trezena de Santo Antônio`
             }
 
@@ -758,7 +782,7 @@ async function gerarPDF() {
                 theme: 'grid', // Estilo da tabela (grid, plain, strip)
                 styles: {
                     font: 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     halign: 'center', // Centraliza o texto na tabela
                     cellPadding: 2
                 },
@@ -768,8 +792,24 @@ async function gerarPDF() {
                 },
             });
 
+            
             // Atualiza yPos para a próxima entrada
             yPos = doc.lastAutoTable.finalY + 10;
+            
+            if(data.getDate() === 13 && mes === 5) {
+                doc.setFontSize(12);
+
+                let obsTrezena = "Obs.: Concentração na praça da Escola Nilo Moraes Pinheiro, em seguida Procissão em direção a Matriz, onde será celebrada a Santa Missa Campal. Todos os Ministros de jaleco!"
+
+                let linhas = doc.splitTextToSize(obsTrezena, larguraMaxima);
+
+                doc.text(linhas, 14, yPos);
+
+                // Atualiza yPos com base na quantidade de linhas (aproximadamente 5 unidades por linha)
+                yPos += linhas.length * 5;
+
+                doc.setFontSize(16);
+            }
 
             // Linha divisória entre domingos
             if ((missaSantaTerezinha || missaSagradoCoracao) && (domingoIndex < 3 || distribuicaoFinal.length == 5 && domingoIndex == 3)) {
@@ -879,8 +919,6 @@ function gerarNovenaEspiritoSanto(){
         const ministrosDomingoNovena = distribuicaoFinal[indice];
         const ministrosSeteHoras = ministrosDomingoNovena["7:00"];
 
-        console.log(ministrosSeteHoras)
-
         var ministrosEscala = [
             "Carlos Magno, Giselda, Maria Aparecida",
             "Eliane, Tereza, Roberta",
@@ -935,7 +973,7 @@ function gerarNovenaEspiritoSanto(){
                 theme: 'grid',
                 styles: {
                     font: 'helvetica',
-                    fontSize: 10,
+                    fontSize: 11,
                     halign: 'center',
                     cellPadding: 2
                 },
@@ -956,6 +994,6 @@ function gerarNovenaEspiritoSanto(){
         doc.save(`Escala_Ministros_Novena_Espirito_Santo/${anoAtual}.pdf`);
 
         let botaoNovenaEspiritoSanto = document.getElementById("botaoEspiritoSanto");
-        botaoNovenaEspiritoSanto.style.display = "block";
+        botaoNovenaEspiritoSanto.style.display = "none";
     }
 }
