@@ -248,7 +248,7 @@ async function gerarPDF() {
                     distribuido["19:00"] = [];
                 }
 
-                if (domingo.getDay() != 0 && domingo.getMonth() === 5 && domingo.getDate() == 13 || domingo.getDate() == 19) {
+                if (domingo.getDay() != 0 && domingo.getMonth() === 5 && (domingo.getDate() == 13 || domingo.getDate() == 19)) {
                     delete distribuido["19:00"];
                     distribuido["17:00"] = [];
                 }
@@ -306,6 +306,11 @@ async function gerarPDF() {
                             historicoEscalas[domingo].add(ministro); 
                             contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
                         }                                       
+                        
+                        return;                    
+                    }
+
+                    if (domingo.getDate() === 12 && domingo.getMonth() === 10 && horario == "19:30") {                                                   
                         
                         return;                    
                     }
