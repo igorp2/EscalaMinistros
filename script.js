@@ -310,8 +310,7 @@ async function gerarPDF() {
                         return;                    
                     }
 
-                    if (domingo.getDate() === 12 && domingo.getMonth() === 10 && horario == "19:30") {                                                   
-                        
+                    if (domingo.getDate() === 12 && domingo.getMonth() === 9 && horario == "19:30") {                                                   
                         return;                    
                     }
 
