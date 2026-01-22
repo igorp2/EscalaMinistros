@@ -225,8 +225,7 @@
             { nome: "Simone", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
             { nome: "Tereza", preferencias: ["7:00"], indisponivel: [] },
             { nome: "Valéria", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
-            { nome: "Vânia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
-            { nome: "Vilma", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
+            { nome: "Vânia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },           
             { nome: "Walquíria", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
             { nome: "Wanderlúcia", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] },
             { nome: "Zoraide", preferencias: ["7:00", "9:00", "19:30"], indisponivel: [] }
@@ -302,7 +301,14 @@
 
             const mesSelecionado = document.getElementById("meses").value;
             document.getElementById("mesSelecionado").innerText = mesSelecionado;
-            const anoAtual = new Date().getFullYear();
+
+
+
+            //MUDAR
+            //const anoAtual = new Date().getFullYear();
+
+            
+            const anoAtual = 2026
             const mes = meses[mesSelecionado];
             const domingos = getDomingos(mes, anoAtual); // Certifique-se que esta função retorna os domingos corretamente
 
