@@ -152,6 +152,7 @@ async function gerarPDF() {
         if(mes == 1){ // Fevereiro
             quartaCinzas = new Date(anoAtual, mes, 18);
             domingos.unshift(new Date(quartaCinzas));
+            domingos.sort((a, b) => a.getTime() - b.getTime());
         }
 
         if(mes == 4){ // Maio
@@ -606,7 +607,6 @@ async function gerarPDF() {
             
                 distribuicao.push(distribuido);
             });
-            
 
             return distribuicao;
         }
