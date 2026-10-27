@@ -50,7 +50,7 @@ function getPrimeiroSabado(mes, ano) {
     let primeiroSabado = diaSemana === 6 ? 1 : 6 - diaSemana + 1;
 
     if(mes == 5){
-        primeiroSabado = 14;
+        primeiroSabado = 16;
     }
 
     let sabado = new Date(ano, mes, primeiroSabado);
@@ -155,10 +155,10 @@ async function gerarPDF() {
             domingos.sort((a, b) => a.getTime() - b.getTime());
         }
 
-        if(mes == 4){ // Maio
-            primeiroMaio = new Date(anoAtual, mes, 1);
-            domingos.unshift(new Date(primeiroMaio));
-        }
+        // if(mes == 4){ // Maio
+        //     primeiroMaio = new Date(anoAtual, mes, 1);
+        //     domingos.unshift(new Date(primeiroMaio));
+        // }
 
         if (mes === 5) { // Junho
             for (let dia = 1; dia <= 13; dia++) {
@@ -168,10 +168,10 @@ async function gerarPDF() {
                 }
             }
 
-            const diaExtra = new Date(anoAtual, mes, 19);
-            if (diaExtra.getDay() !== 0) {
-                domingos.push(diaExtra);
-            }
+            // const diaExtra = new Date(anoAtual, mes, 19);
+            // if (diaExtra.getDay() !== 0) {
+            //     domingos.push(diaExtra);
+            // }
 
             domingos.sort((a, b) => a.getTime() - b.getTime());
         }
@@ -211,13 +211,14 @@ async function gerarPDF() {
         const primeiraSexta = getPrimeiraSexta(mes, anoAtual);
 
         let ministrosPorHorario = {
-            //Tirei Branca, Vilma e Gislene, Giselda e Magno, Wanderlúcia
+            //Tirei Branca, Gislene, Giselda e Magno, Wanderlúcia
             "7:00": [],
             "9:00": [],
-            "17:00": ["Janilda", "Walquíria", "Marlúcia", "Mateus", "Carlos Roberto", "Eliene", "Giselaine"],
-            "19:00": ["Avelino", "Antônia", "Carlos Roberto", "Celma", "Claudiana", "Dione", "Djalma", "Eliane", "Elivander", "Eliene", "Elma", "França", "Geralda", "Giselaine", "Janilda", "Jozeni", "Juliana Pereira", "Juliana Rodrigues", "Lhidê", "Léia", "Luiza", "Manoel", "Marina", "Marismeire", "Marlene", "Marlúcia", "Maria Aparecida", "Fátima", "Maria Joana", "Mateus", "Márcia", "Marizeth", "Nilton", "Nívea", "Roberta", "Robson", "Rosilene", "Sebastião", "Simone", "Tereza", "Valéria", "Vânia", "Walquíria", "Zoraide"],
+            "17:00": ["Robson", "Léia", "Zoraide", "Maria Aparecida", "Juliana Rodrigues", "Valéria", "Rosilene", "Janilda", "Walquíria", "Marlúcia", "Mateus", "Carlos Roberto", "Eliene", "Giselaine", "França", "Dione", "Juliana Pereira"],
+            "18:00": ["Avelino", "Antônia", "Carlos Magno", "Carlos Roberto", "Celma", "Claudiana", "Dione", "Djalma", "Eliane", "Elivander", "Eliene", "Elma", "França", "Geralda", "Giselaine", "Giselda", "Gislene", "Janilda", "Jozeni", "Juliana Pereira", "Juliana Rodrigues", "Lhidê", "Léia", "Luiza", "Manoel", "Marina", "Marismeire", "Marlene", "Marlúcia", "Maria Aparecida", "Fátima", "Maria Joana", "Mateus", "Márcia", "Marizeth", "Nilton", "Nívea", "Roberta", "Robson", "Rosilene", "Sebastião", "Simone", "Tereza", "Valéria", "Vânia", "Walquíria", "Zoraide"],
+            "19:00": ["Avelino", "Antônia", "Carlos Magno", "Carlos Roberto", "Celma", "Claudiana", "Dione", "Djalma", "Eliane", "Elivander", "Eliene", "Elma", "França", "Geralda", "Giselaine", "Giselda", "Gislene", "Janilda", "Jozeni", "Juliana Pereira", "Juliana Rodrigues", "Lhidê", "Léia", "Luiza", "Manoel", "Marina", "Marismeire", "Marlene", "Marlúcia", "Maria Aparecida", "Fátima", "Maria Joana", "Mateus", "Márcia", "Marizeth", "Nilton", "Nívea", "Roberta", "Robson", "Rosilene", "Sebastião", "Simone", "Tereza", "Valéria", "Vânia", "Walquíria", "Zoraide"],
             "19:30": [],
-            "20:30": ["Avelino", "Antônia", "Carlos Roberto", "Celma", "Claudiana", "Dione", "Djalma", "Eliane", "Elivander", "Eliene", "Elma", "França", "Geralda", "Giselaine", "Janilda", "Jozeni", "Juliana Pereira", "Juliana Rodrigues", "Lhidê", "Léia", "Luiza", "Manoel", "Marina", "Marismeire", "Marlene", "Marlúcia", "Maria Aparecida", "Fátima", "Maria Joana", "Mateus", "Márcia", "Marizeth", "Nilton", "Nívea", "Roberta", "Robson", "Rosilene", "Sebastião", "Simone", "Tereza", "Valéria", "Vânia", "Walquíria", "Zoraide"]
+            "20:30": ["Avelino", "Antônia", "Carlos Roberto", "Celma", "Claudiana", "Dione", "Djalma", "Eliane", "Elivander", "Eliene", "Elma", "França", "Geralda", "Giselaine", "Giselda", "Gislene", "Janilda", "Jozeni", "Juliana Pereira", "Juliana Rodrigues", "Lhidê", "Léia", "Luiza", "Manoel", "Marina", "Marismeire", "Marlene", "Marlúcia", "Maria Aparecida", "Fátima", "Maria Joana", "Mateus", "Márcia", "Marizeth", "Nilton", "Nívea", "Roberta", "Robson", "Rosilene", "Sebastião", "Simone", "Tereza", "Valéria", "Vânia", "Walquíria", "Zoraide"]
         };
 
         // Passo 1: Mapear preferências dos ministros
@@ -278,13 +279,20 @@ async function gerarPDF() {
                     delete distribuido["19:30"];
                     distribuido["19:00"] = [];
                 }
+
+                // Verificações de junho
+                if (domingo.getDate() == 29 && domingo.getMonth() === 2) {
+                    delete distribuido["9:00"];
+                    delete distribuido["19:30"];
+                    distribuido["18:00"] = [];
+                }
             
                 // Verifique se é o primeiro de maio 
-                if (domingo.getDate() === 1 && domingo.getMonth() === 4) {
-                    // Remova os horários "7:00" e "9:00" para o primeiro de maio
-                    delete distribuido["7:00"];
-                    delete distribuido["9:00"];
-                }
+                // if (domingo.getDate() === 1 && domingo.getMonth() === 4) {
+                //     // Remova os horários "7:00" e "9:00" para o primeiro de maio
+                //     delete distribuido["7:00"];
+                //     delete distribuido["9:00"];
+                // }
 
                 // Verificações de junho
                 if (domingo.getDay() != 0 && domingo.getMonth() === 5) {
@@ -295,12 +303,12 @@ async function gerarPDF() {
                     distribuido["19:00"] = [];
                 }
 
-                if (domingo.getDay() != 0 && domingo.getMonth() === 5 && (domingo.getDate() == 13 || domingo.getDate() == 19)) {
+                if (domingo.getDay() != 0 && domingo.getMonth() === 5 && (domingo.getDate() == 13 || domingo.getDate() == 4)) {
                     delete distribuido["19:00"];
                     distribuido["17:00"] = [];
                 }
 
-                if (domingo.getMonth() === 5 && domingo.getDate() == 1 || domingo.getDate() == 8) {
+                if (domingo.getMonth() === 5 && (domingo.getDate() == 1 || domingo.getDate() == 8)) {
                     delete distribuido["19:30"];
                     distribuido["19:00"] = [];
                 }
@@ -323,7 +331,7 @@ async function gerarPDF() {
 
                 }
 
-                if (domingo.getMonth() === 11 && domingo.getDate() == 24 || domingo.getDate() == 31) {
+                if (domingo.getMonth() === 11 && (domingo.getDate() == 24 || domingo.getDate() == 31)) {
                     delete distribuido["7:00"];
                     delete distribuido["9:00"];
                     delete distribuido["19:30"];
@@ -354,87 +362,110 @@ async function gerarPDF() {
                     
                     let ministros = [...ministrosPorHorario[horario]]; // Copiar a lista de ministros
 
-                    if (((domingo.getDate() >= 2 && domingo.getDate() <= 7) || (domingo.getDate() >= 9 && domingo.getDate() <= 10)) && domingo.getMonth() == 5) {
-                        var indices = [2, 3, 4, 5, 6, 7, 9, 10]
+                    if ((domingo.getDate() != 4 && domingo.getDate() != 7 && domingo.getDate() <= 12) && domingo.getMonth() == 5) {
+                        var indices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
                         var comunidades = [
-                            "5 Ministros da Comunidade Nossa Senhora das Graças",
-                            "5 Ministros da Comunidade São Judas Tadeu",
-                            "5 Ministros da Comunidade Nossa Senhora Aparecida",
-                            "5 Ministros da Comunidade Santa Terezinha",
-                            "5 Ministros da Comunidade São Sebastião",
-                            "5 Ministros da Matriz",
-                            "5 Ministros da Comunidade São José",
-                            "5 Ministros da Comunidade Santa Luzia"
-                        ]
+                            "4 Ministros da Comunidade São José",                // 1º dia
+                            "4 Ministros da Comunidade Nossa Senhora Aparecida",// 2º dia
+                            "4 Ministros da Comunidade São Sebastião",          // 3º dia
+                            "4 Ministros de Corpus Christi",                    // 4º dia
+                            "4 Ministros da Matriz",                            // 5º dia
+                            "4 Ministros da Comunidade Taparuba",               // 6º dia
+                            "4 Ministros da Comunidade São Francisco",          // 7º dia
+                            "4 Ministros da Comunidade São Judas",              // 8º dia
+                            "4 Ministros da Comunidade Nossa Senhora das Graças",// 9º dia
+                            "4 Ministros da Comunidade Santa Luzia",            // 10º dia
+                            "4 Ministros da Comunidade Santa Teresinha",        // 11º dia
+                            "Ministros do Apostolado da Oração"               // 12º dia
+                        ];
 
                         distribuido[horario].push(comunidades[indices.indexOf(domingo.getDate())]);
                         return;  
                     }
                     
-                    if (domingo.getDate() === 1 && domingo.getMonth() === 5 && horario == "19:00") {
-                        const nomesEscala = ["Janilda", "França", "Dione", "Marlúcia", "Juliana Pereira"];                
+                    // if (domingo.getDate() === 1 && domingo.getMonth() === 5 && horario == "19:00") {
+                    //     const nomesEscala = ["Janilda", "França", "Dione", "Marlúcia", "Juliana Pereira"];                
                     
-                        const escalaDia1 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
+                    //     const escalaDia1 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
 
-                        if (!historicoEscalas[domingo]) {
-                            historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
-                        }
+                    //     if (!historicoEscalas[domingo]) {
+                    //         historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
+                    //     }
 
-                        for (let ministro of escalaDia1) {
-                            distribuido[horario].push(ministro);
-                            historicoEscalas[domingo].add(ministro); 
-                            contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
-                        }                                       
+                    //     for (let ministro of escalaDia1) {
+                    //         distribuido[horario].push(ministro);
+                    //         historicoEscalas[domingo].add(ministro); 
+                    //         contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
+                    //     }                                       
                         
-                        return;                    
-                    }
+                    //     return;                    
+                    // }
 
                     if (domingo.getDate() === 12 && domingo.getMonth() === 9 && horario == "19:30") {                                                   
                         return;                    
                     }
 
-                    if (domingo.getDate() === 11 && domingo.getMonth() === 5) {
-                        const nomesEscala = ["Nilton", "Luiza", "Márcia", "Simone", "Geralda"];                
+                    // if (domingo.getDate() === 11 && domingo.getMonth() === 5) {
+                    //     const nomesEscala = ["Nilton", "Luiza", "Márcia", "Simone", "Geralda"];                
                     
-                        const escalaDia11 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
+                    //     const escalaDia11 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
 
+                    //     if (!historicoEscalas[domingo]) {
+                    //         historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
+                    //     }
+
+                    //     for (let ministro of escalaDia11) {
+                    //         distribuido[horario].push(ministro);
+                    //         historicoEscalas[domingo].add(ministro); 
+                    //         contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
+                    //     }                                       
+                        
+                    //     return;                    
+                    // }
+
+                    // if (domingo.getDate() === 12 && domingo.getMonth() === 5) {
+                    //     const nomesEscala = ["Valéria", "Elivander", "Juliana Pereira", "Lhidê", "Fátima"];                
+                    
+                    //     const escalaDia12 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
+
+                    //     if (!historicoEscalas[domingo]) {
+                    //         historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
+                    //     }
+
+                    //     for (let ministro of escalaDia12) {
+                    //         distribuido[horario].push(ministro);
+                    //         historicoEscalas[domingo].add(ministro); 
+                    //         contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
+                    //     }                                       
+                        
+                    //     return;                    
+                    // }    
+                    
+                    if (domingo.getDate() === 4 && domingo.getMonth() === 5) {
+                        const nomesEscala = ["Léia", "Zoraide", "Maria Aparecida", "Juliana Rodrigues", "Rosilene", "Valéria"];                      
+                    
+                        const escalaDia4 = ministros.filter(ministro => nomesEscala.includes(ministro));
+                    
                         if (!historicoEscalas[domingo]) {
                             historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
                         }
 
-                        for (let ministro of escalaDia11) {
+                        for (let ministro of escalaDia4) {
                             distribuido[horario].push(ministro);
                             historicoEscalas[domingo].add(ministro); 
                             contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
-                        }                                       
+                        }
                         
                         return;                    
                     }
 
-                    if (domingo.getDate() === 12 && domingo.getMonth() === 5) {
-                        const nomesEscala = ["Valéria", "Elivander", "Juliana Pereira", "Lhidê", "Fátima"];                
-                    
-                        const escalaDia12 = ministros.filter(ministro => nomesEscala.includes(ministro));                       
-
-                        if (!historicoEscalas[domingo]) {
-                            historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
-                        }
-
-                        for (let ministro of escalaDia12) {
-                            distribuido[horario].push(ministro);
-                            historicoEscalas[domingo].add(ministro); 
-                            contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
-                        }                                       
-                        
-                        return;                    
-                    }                   
-
                     if (domingo.getDate() === 13 && domingo.getMonth() === 5) {
-                        const nomesEscala = ["Janilda", "Walquíria", "Marlúcia", "Mateus", "Carlos Roberto", "Eliene", "Giselaine"];
-                        const nomesPlacas = ["Carlos Magno", "Giselda", "França", "Jozeni", "Eliane", "Vilma", "Tereza"]
+                        const nomesEscala = ["Juliana Pereira", "Dione", "Marlúcia", "França", "Eliene", "Robson"];
+                        // const nomesPlacas = ["Carlos Magno", "Giselda", "França", "Jozeni", "Eliane", "Vilma", "Tereza"]
                     
                         const escalaDia13 = ministros.filter(ministro => nomesEscala.includes(ministro));
-                        const escalaDia13Placas = ministros.filter(ministro => nomesPlacas.includes(ministro));
+                        // const escalaDia13Placas = ministros.filter(ministro => nomesPlacas.includes(ministro));
 
                         if (!historicoEscalas[domingo]) {
                             historicoEscalas[domingo] = new Set(); // Se ainda não existia, inicializa o Set
@@ -446,10 +477,10 @@ async function gerarPDF() {
                             contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
                         }
                        
-                        for (let ministro of escalaDia13Placas) {
-                            historicoEscalas[domingo].add(ministro); 
-                            contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
-                        }
+                        // for (let ministro of escalaDia13Placas) {
+                        //     historicoEscalas[domingo].add(ministro); 
+                        //     contadorEscalas[ministro] = (contadorEscalas[ministro] || 0) + 1;
+                        // }
                         
                         return;                    
                     }
@@ -651,47 +682,47 @@ async function gerarPDF() {
         // Adiciona o título negrito
         doc.setFont("helvetica", "bold");
 
-        if(domingos[0].getDate() == 1 && mes == 4){
-            // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
-            if (yPos + 30 > maxY) {
-                doc.addPage();
-                yPos = 20;
-            }
+        // if(domingos[0].getDate() == 1 && mes == 4){
+        //     // Verifica se o yPos ultrapassou o limite da página, se sim, adiciona uma nova página
+        //     if (yPos + 30 > maxY) {
+        //         doc.addPage();
+        //         yPos = 20;
+        //     }
 
-            let texto = `${domingos[0].toLocaleDateString('pt-BR')} - (Quinta-feira) - Abertura do Mês de Maria`;
+        //     let texto = `${domingos[0].toLocaleDateString('pt-BR')} - (Quinta-feira) - Abertura do Mês de Maria`;
 
-            // Adiciona o texto ao PDF
-            doc.text(texto, 14, yPos);
-            yPos += 10;
+        //     // Adiciona o texto ao PDF
+        //     doc.text(texto, 14, yPos);
+        //     yPos += 10;
 
-            const escalaDomingo = distribuicaoFinal[0];
+        //     const escalaDomingo = distribuicaoFinal[0];
 
-            // Prepara os dados para a tabela
-            const tabelaDados = Object.keys(escalaDomingo).map(horario => {
-                return [horario, escalaDomingo[horario].join(', ')];
-            });
+        //     // Prepara os dados para a tabela
+        //     const tabelaDados = Object.keys(escalaDomingo).map(horario => {
+        //         return [horario, escalaDomingo[horario].join(', ')];
+        //     });
 
-            doc.autoTable({
-                startY: yPos,
-                head: [['Horário', 'Ministros']],
-                body: tabelaDados,
-                theme: 'grid', // Estilo da tabela (grid, plain, strip)
-                styles: {
-                    font: 'helvetica',
-                    fontSize: 11,
-                    halign: 'center', // Centraliza o texto na tabela
-                    cellPadding: 2
-                },
-                headStyles: {
-                    fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
-                    halign: 'center' // Centraliza o texto no cabeçalho
-                },
-            });
-            yPos = doc.lastAutoTable.finalY + 10;
+        //     doc.autoTable({
+        //         startY: yPos,
+        //         head: [['Horário', 'Ministros']],
+        //         body: tabelaDados,
+        //         theme: 'grid', // Estilo da tabela (grid, plain, strip)
+        //         styles: {
+        //             font: 'helvetica',
+        //             fontSize: 11,
+        //             halign: 'center', // Centraliza o texto na tabela
+        //             cellPadding: 2
+        //         },
+        //         headStyles: {
+        //             fillColor: [90, 90, 90], // Cor do cabeçalho (cinza mais escuro)
+        //             halign: 'center' // Centraliza o texto no cabeçalho
+        //         },
+        //     });
+        //     yPos = doc.lastAutoTable.finalY + 10;
 
-            doc.line(0, yPos, larguraPagina, yPos);
-            yPos += 10;
-        }
+        //     doc.line(0, yPos, larguraPagina, yPos);
+        //     yPos += 10;
+        // }
 
         var missaSagradoCoracao = document.getElementById("missaSagradoCoracao").checked;
 
@@ -725,11 +756,11 @@ async function gerarPDF() {
             yPos += 10;
         }
 
-        var missaSantaTerezinha = document.getElementById("missaSantaTerezinha").checked;
+        var missaSantaTeresinha = document.getElementById("missaSantaTeresinha").checked;
 
-        // Escala Santa Terezinha
-        if (missaSantaTerezinha && primeiroSabado.getDate() != 7 && mes != 5) {
-            texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha`;
+        // Escala Santa Teresinha
+        if (missaSantaTeresinha && primeiroSabado.getDate() != 7 && mes != 5) {
+            texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Teresinha`;
 
             // Adiciona o texto ao PDF
             doc.text(texto, 14, yPos);
@@ -798,8 +829,8 @@ async function gerarPDF() {
                 missaSagradoCoracao = false;
             }
 
-            if (missaSantaTerezinha && primeiroSabado.getDate() >= 7 && domingos[domingoIndex].getDate() > primeiroSabado.getDate()) {
-                let texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Sábado) - Missa na Comunidade Santa Terezinha`;
+            if (missaSantaTeresinha && primeiroSabado.getDate() >= 7 && domingos[domingoIndex].getDate() > primeiroSabado.getDate()) {
+                let texto = `${primeiroSabado.toLocaleDateString('pt-BR')} - (Terça-feira) - Missa na Comunidade Santa Teresinha`;
 
                 // Adiciona o texto ao PDF
                 doc.text(texto, 14, yPos);
@@ -825,7 +856,7 @@ async function gerarPDF() {
 
                 doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
-                missaSantaTerezinha = false;
+                missaSantaTeresinha = false;
             }
 
             // Espera a resposta da API para obter a celebração
@@ -838,7 +869,7 @@ async function gerarPDF() {
             const data = domingos[domingoIndex];
             const diaSemana = diasSemana[data.getDay()];
 
-            if (mes == 5 && data.getDate() == 15 || data.getDate() == 29) {
+            if (mes == 5 && (data.getDate() == 15 || data.getDate() == 29)) {
                 doc.addPage();
                 yPos = 20;
             }
@@ -851,15 +882,19 @@ async function gerarPDF() {
                 celebracaoTexto = `${data.getDate()}º Dia da Trezena de Santo Antônio`
             }
 
+            if(data.getDate() == 7 && mes == 5){
+                celebracaoTexto = "10º Domingo do Tempo Comum e 7º Dia da Trezena de Santo Antônio"
+            }
+
             if(data.getDate() == 8 && mes == 5){
-                celebracaoTexto = "Solenidade Domingo de Pentecostes e 8º Dia da Trezena de Santo Antônio"
+                celebracaoTexto = "8º Dia da Trezena de Santo Antônio"
             }
 
             if(data.getDate() == 13 && mes == 5){
                 celebracaoTexto = "Festa do Padroeiro Santo Antônio – Missa Campal"
             }
 
-            if(data.getDate() == 19 && mes == 5){
+            if(data.getDate() == 4 && mes == 5){
                 celebracaoTexto += " – Corpus Christi"
             }
 
@@ -898,9 +933,16 @@ async function gerarPDF() {
             // Prepara os dados para a tabela
             let tabelaDados;
 
-            if (data.getDate() === 13 && mes === 5) {
+            if (data.getDate() === 29 && mes === 2) {
                 tabelaDados = Object.keys(escalaDomingo).map(horario => {
-                    return [horario, escalaDomingo[horario].join(', ') + "\nPlacas: Carlos Magno, Giselda, França, Jozeni, Eliane, Vilma, Tereza"];
+                    let texto = escalaDomingo[horario].join(', ');
+
+                    // Caso especial: 18h
+                    if (horario === "18:00") {
+                        texto += "\nPlacas: Carlos Magno, Giselda";
+                    }
+
+                    return [horario, texto];
                 });
             } else {
                 tabelaDados = Object.keys(escalaDomingo).map(horario => {
@@ -930,7 +972,7 @@ async function gerarPDF() {
             // Atualiza yPos para a próxima entrada
             yPos = doc.lastAutoTable.finalY + 10;
             
-            if(data.getDate() === 13 && mes === 5) {
+            if(data.getDate() === 29 && mes === 2) {
                 doc.setFontSize(12);
 
                 let obsTrezena = "Obs.: Concentração na praça da Escola Nilo Moraes Pinheiro, em seguida Procissão em direção a Matriz, onde será celebrada a Santa Missa Campal. Todos os Ministros de jaleco!"
@@ -946,7 +988,7 @@ async function gerarPDF() {
             }
 
             // Linha divisória entre domingos
-            if ((missaSantaTerezinha || missaSagradoCoracao) && (domingoIndex < 3 || distribuicaoFinal.length == 5 && domingoIndex == 3)) {
+            if ((missaSantaTeresinha || missaSagradoCoracao) && (domingoIndex < 3 || distribuicaoFinal.length == 5 && domingoIndex == 3)) {
                 doc.line(0, yPos, larguraPagina, yPos);
                 yPos += 10;
             }
